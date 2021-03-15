@@ -1,0 +1,40 @@
+{
+  "name": "dpay_service",
+  "version": "1.0.0",
+  "description": "supper shop",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "set DEBUG=info,errorLog,warning & nodemon --exec babel-node index.js"
+  },
+  "author": "mokbul",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/runtime": "^7.8.3",
+    "axios": "^0.21.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "csv-parser": "^3.0.0",
+    "debug": "^4.1.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
+    "express-validator": "^5.3.1",
+    "i18n-2": "^0.7.3",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
+    "nodemailer": "^6.5.0",
+    "nodemon": "^2.0.1",
+    "password-validator": "^5.0.3",
+    "sequelize": "^5.21.3",
+    "tedious": "^9.2.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.3",
+    "@babel/node": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "@babel/register": "^7.8.3",
+    "nodemon": "^2.0.2"
+  }
+}
