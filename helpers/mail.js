@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer'
-import 'dotenv/config'
+require('dotenv').config()
+
 
 
 const Mail = ({to,text,subject=null,html=null,attachments=null})=>{
@@ -10,8 +11,9 @@ const Mail = ({to,text,subject=null,html=null,attachments=null})=>{
             let transporter = nodemailer.createTransport({
 
 
-              service: 'gmail',//smtp.gmail.com //in place of service use host...
-              secure: false,//true
+              //service: 'gmail',//smtp.gmail.com //in place of service use host...
+              host: 'smtp.office365.com',
+              secure: false,
               port: 587,
                 auth: {
                     user: process.env.EMAIL,

@@ -37,10 +37,9 @@ router.post('/check_mobile',checkModule,MobileValidator,async(req,res)=>{
 
                     await MerchentUserAuthTrack.update({fullname:data.Merchant_Name,otp:OTP,otp_created_at:currenttimestamp()},{where:{MSISDN:mobile}})
 
-                    Mail({to:'mokbulhossain098@gmail.com',subject:notification_title,text:`OTP is ${OTP}`})
                     if(data.Email){
 
-                      //  Mail({to:data.Email,subject:notification_title,text:OTP})
+                        Mail({to:data.Email,subject:notification_title,text:`OTP is ${OTP}`})
 
                     }
 
@@ -52,10 +51,9 @@ router.post('/check_mobile',checkModule,MobileValidator,async(req,res)=>{
 
                     await MerchentUserAuthTrack.create({MSISDN:data.MSISDN,fullname:data.Merchant_Name,otp:OTP,otp_created_at:currenttimestamp()})
 
-                    Mail({to:'mokbulhossain098@gmail.com',subject:notification_title,text:`OTP is ${OTP}`})
                     if(data.Email){
 
-                      //  Mail({to:data.Email,subject:notification_title,text:OTP})
+                        Mail({to:data.Email,subject:notification_title,text:`OTP is ${OTP}`})
 
                     }
                     return res.status(200).send(OK( {is_firsttime:true}, null, req));

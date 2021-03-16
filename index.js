@@ -32,7 +32,6 @@ app.use(express.static(__dirname+`/${publicDir}`));
 app.use(morgan('dev'));
 app.use(cors())
 
-    
 
 // validator module
 
