@@ -30,7 +30,7 @@ router.get('/list',async(req,res)=>{
     }
 })
 
-router.get('/create_user',async(req,res)=>{
+router.post('/create_user',async(req,res)=>{
 
     try{
 

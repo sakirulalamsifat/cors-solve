@@ -21,6 +21,10 @@ const MerchentUserAuthTrack = sequelize.define('MerchentUserAuthTrack', {
         type: DataTypes.TEXT,
         allowNull: false
     },
+    email:{
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
     status:{
         type: DataTypes.SMALLINT,
         defaultValue:1
