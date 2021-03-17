@@ -3,16 +3,42 @@ import jwt from 'jsonwebtoken';
 import {checkModule,checkAuthorizaion,hassPasswordGenerate,tokenGenerate,verifyPassword} from '../middleware';
 import {CustomerOtherInformationValidator,MobileValidator} from '../middleware/validator'
 import  {OK, INTERNAL_SERVER_ERROR,BAD_REQUEST} from '../helpers/responseHelper'
-import {MerchentUserAuthTrack,MerchentProfile} from '../models'
+import {MerchentUserAuthTrack,MerchentProfile,SmsRequestLog} from '../models'
 import {genRandomInRange,currenttimestamp,SecondDifferenceBetweenToDate} from '../helpers/utilities'
 import {Mail} from '../helpers/mail'
 import 'dotenv/config'
-
+import axios from 'axios'
 
 const router = express.Router()
 
 const notification_title = process.env.notification_title
 const otp_valid_time = process.env.otp_valid_time
+
+const sms_api_url = process.env.sms_api_url
+const sms_api_username = process.env.sms_api_username
+const sms_api_userid = process.env.sms_api_userid
+const sms_api_handle = process.env.sms_api_handle
+const sms_api_from = process.env.sms_api_from
+
+
+const SmsApi = (Destination_MSISDN,body)=>{
+
+    //fetch sms api....
+    axios.get(`${sms_api_url}?username=${sms_api_username}&userid=${sms_api_userid}&handle=${sms_api_handle}&from=${sms_api_from}&msg=${body}&to=${+Destination_MSISDN}`)
+    .then(response=>{
+        console.log(response.data)
+        let data = response.data
+        SmsRequestLog.create({
+            MSISDN:Destination_MSISDN.toString(),
+            ResponseBody:data
+        })
+        
+    })
+    .catch(error=>{
+        console.log("sms sending error")
+        
+    }) 
+}
 
 router.post('/check_mobile',checkModule,MobileValidator,async(req,res)=>{
 
@@ -40,6 +66,7 @@ router.post('/check_mobile',checkModule,MobileValidator,async(req,res)=>{
                     if(data.Email){
 
                         Mail({to:data.Email,subject:notification_title,text:`OTP is ${OTP}`})
+                        SmsApi(mobile,`OTP is ${OTP}`)
 
                     }
 
@@ -54,6 +81,7 @@ router.post('/check_mobile',checkModule,MobileValidator,async(req,res)=>{
                     if(data.Email){
 
                         Mail({to:data.Email,subject:notification_title,text:`OTP is ${OTP}`})
+                        SmsApi(mobile,`OTP is ${OTP}`)
 
                     }
                     return res.status(200).send(OK( {is_firsttime:true}, null, req));
