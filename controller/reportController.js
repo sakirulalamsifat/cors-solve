@@ -10,12 +10,14 @@ import fs from 'fs'
 
 const router = express.Router()
 
+const publicDir = process.env.publicDir
+
 const processcsvfile = async(MSISDN,csvurl)=>{
 
     const fullurl = csvurl
     csvurl = csvurl.split(process.env.host)
     csvurl = csvurl[1]
-    csvurl = `public/${csvurl}`
+    csvurl = `${publicDir}/${csvurl}`
 
     const dataforupload = []
 
@@ -55,7 +57,7 @@ router.get('/reportlist',async(req,res)=>{
 
     try{
 
-        let {MSISDN} = req.user_info
+        let {common_id:MSISDN} = req.user_info
 
         BulkPayment.findAll({where:{Merchant_Wallet_ID:MSISDN}}).then(data=>{
 
@@ -79,7 +81,7 @@ router.post('/upload',async(req,res)=>{
 
         let {report_file} = req.body
 
-        let {MSISDN} = req.user_info
+        let {common_id:MSISDN} = req.user_info
 
         if(!report_file){ return res.status(400).send(BAD_REQUEST(req.i18n.__('filemissing'), null, req)) }
    

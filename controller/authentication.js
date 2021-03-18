@@ -165,8 +165,9 @@ const somePartOfLogin = async(user,req,res,use_temp_password=false)=>{
 
     let{MSISDN,parent_id,fullname} = user,login_datetime = new Date();
     let is_merchent = parent_id?false:true
+    let common_id = parent_id || MSISDN
 
-    let token = await tokenGenerate({MSISDN,parent_id,fullname,is_merchent,login_datetime})
+    let token = await tokenGenerate({MSISDN,parent_id,fullname,is_merchent,common_id,login_datetime})
 
     return res.status(200).send(OK( {user_info:{MSISDN,fullname,is_merchent},token},null, req));
 }

@@ -3,6 +3,7 @@ var fs = require('fs');
 require('dotenv').config()
 import sequelize from '../config/database'
 
+const publicDir = process.env.publicDir
 
 const genRandomInRange = (min, max) => Math.floor(Math.random() * (max - min)) + min
 const getlength=(number)=>number.toString().length
@@ -15,13 +16,17 @@ const monthInLeter=['January','February','March','April','May','June','July','Au
     monthInLeter,
 
   base64fileUpload:(image,ext)=>{
-   let data = image.split(';base64,')
-    let buff = Buffer.from(data[1], 'base64');
-    let initialUrl = `report/file${Date.now()}.${ext}`
-    fs.writeFileSync(`./public/${initialUrl}`, buff);
-    return `${process.env.host}/${initialUrl}`
 
-  },
+    const dir  = publicDir+'/report'
+    if (!fs.existsSync(dir)){fs.mkdirSync(dir) }
+
+    let data = image.split(';base64,')
+     let buff = Buffer.from(data[1], 'base64');
+     let initialUrl = `report/file${Date.now()}.${ext}`
+     fs.writeFileSync(`./${publicDir}/${initialUrl}`, buff);
+     return `${process.env.host}/${initialUrl}`
+ 
+   },
     // expand(3, 2) returns "($1, $2), ($3, $4), ($5, $6)" 
      expand:(rowCount, columnCount, startAt=1)=>{
       var index = startAt

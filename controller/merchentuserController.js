@@ -1,6 +1,7 @@
 import express from 'express'
 import  {OK, INTERNAL_SERVER_ERROR,BAD_REQUEST} from '../helpers/responseHelper'
 import {MerchentUserAuthTrack,MerchentProfile} from '../models'
+import {hassPasswordGenerate} from '../middleware'
 import 'dotenv/config'
 
 
@@ -11,7 +12,7 @@ router.get('/list',async(req,res)=>{
 
     try{
 
-        let {MSISDN} = req.user_info
+        let {common_id:MSISDN} = req.user_info
 
         MerchentUserAuthTrack.findAll({where:{parent_id:MSISDN}}).then(async data=>{
 
@@ -36,7 +37,7 @@ router.post('/create_user',async(req,res)=>{
 
         let {mobile,fullname,password,email} = req.body 
 
-        let {MSISDN} = req.user_info
+        let {common_id:MSISDN} = req.user_info
 
         const info = await MerchentUserAuthTrack.findOne({where:{MSISDN:mobile}})
 
@@ -46,7 +47,9 @@ router.post('/create_user',async(req,res)=>{
 
         }
 
-        MerchentUserAuthTrack.create({MSISDN:mobile,fullname,password,email,parent_id:MSISDN}).then(async data=>{
+        const hasspass = await hassPasswordGenerate(password)
+
+        MerchentUserAuthTrack.create({MSISDN:mobile,fullname,password:hasspass,email,parent_id:MSISDN}).then(async data=>{
 
             return res.status(200).send(OK( null, null, req));
 
@@ -69,7 +72,7 @@ router.get('/active_user',async(req,res)=>{
 
         let {mobile} = req.body 
 
-        let {MSISDN} = req.user_info
+        let {common_id:MSISDN} = req.user_info
 
         const info = await MerchentUserAuthTrack.findOne({where:{MSISDN:mobile,parent_id:MSISDN}})
 
@@ -103,7 +106,7 @@ router.get('/inactive_user',async(req,res)=>{
 
         let {mobile} = req.body 
 
-        let {MSISDN} = req.user_info
+        let {common_id:MSISDN} = req.user_info
 
         const info = await MerchentUserAuthTrack.findOne({where:{MSISDN:mobile,parent_id:MSISDN}})
 

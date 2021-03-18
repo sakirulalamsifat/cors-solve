@@ -29,6 +29,7 @@ app.use (checkInvalidInput);
 app.use(express.urlencoded({limit: '1024mb', extended: true}));
 app.use(express.static(__dirname+`/${publicDir}`));
 
+
 app.use(morgan('dev'));
 app.use(cors())
 
