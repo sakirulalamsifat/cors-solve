@@ -77,7 +77,7 @@ const SW_TBL_PROFILE_MERCHANT_TEMP = sequelize.define('SW_TBL_PROFILE_MERCHANT_T
         type: DataTypes.TEXT
     },
     IsCashOut:{
-        type: DataTypes.BOOLEAN
+        type: DataTypes.TINYINT
     },
     Bank_Code:{
         type: DataTypes.TEXT,
@@ -174,7 +174,7 @@ const SW_TBL_PROFILE_MERCHANT_TEMP = sequelize.define('SW_TBL_PROFILE_MERCHANT_T
         type: DataTypes.TEXT
     },
     Is_Visible_On_App:{
-        type: DataTypes.BOOLEAN
+        type: DataTypes.TINYINT
     },
     Temp_Status:{
         type: DataTypes.TINYINT
@@ -190,22 +190,22 @@ const SW_TBL_PROFILE_MERCHANT_TEMP = sequelize.define('SW_TBL_PROFILE_MERCHANT_T
         allowNull:false
     },
     Is_Agent_Payment:{
-        type: DataTypes.BOOLEAN
+        type: DataTypes.TINYINT
     },
     Is_Customer_Payment:{
-        type: DataTypes.BOOLEAN
+        type: DataTypes.TINYINT
     },
     Group_Name:{
         type: DataTypes.TEXT
     },
     Is_Web_Login:{
-        type: DataTypes.BOOLEAN
+        type: DataTypes.TINYINT
     },
     CommonBusinessName:{
         type: DataTypes.TEXT
     },
     Enable_Sms_Notification:{
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.TINYINT,
     },
     ServiceUrl:{
         type: DataTypes.DATE,
@@ -244,7 +244,7 @@ const SW_TBL_PROFILE_MERCHANT_TEMP = sequelize.define('SW_TBL_PROFILE_MERCHANT_T
         type: DataTypes.INTEGER,
     },
     Is_Single_Number :{
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.TINYINT,
     },
     Exchange_Rate_Id:{
         type: DataTypes.INTEGER
