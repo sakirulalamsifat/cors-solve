@@ -47,6 +47,8 @@ app.use(fileupload({
     responseOnLimit: 'One or more files exceeds the file limit of 1MB'
 }));
 
+
+
 app.use("/api/auth/",Authentication);
 
 //token check.....after below all route....
