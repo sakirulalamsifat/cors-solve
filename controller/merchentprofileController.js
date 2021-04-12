@@ -188,15 +188,17 @@ const FileUpload = async (req, res) => {
 // })
 
 router.post('/update', async (req, res) => {
-    
+
   try {
     let { ID_Image = null, License_Image = null, Logo_Image = null, ID_Front_Image = null, ID_Back_Image = null } = await FileUpload(req, res)
 
     let {
       ID_Number,
       Id_Issued_Place,
-      ID_Issue_Date,
-      ID_Expiry_Date,
+      Merchant_Name ,
+      Merchant_Nature,
+      Wallet_Type,
+
       License_No,
       Website,
       Report_Email,
@@ -226,6 +228,8 @@ router.post('/update', async (req, res) => {
       Street_House_No
     } = req.body
 
+    let ID_Issue_Date = new  Date(), ID_Expiry_Date = new Date();
+
     let { MSISDN, is_merchent } = req.user_info
 
     const Temp_Status = 0, Status = 0
@@ -248,66 +252,61 @@ router.post('/update', async (req, res) => {
       sequelize.query(`EXEC SW_PROC_MERCHANTS_PROFILE 
                       @flag = "U",
                       @MSISDN=${MSISDN},
-
-
-                      @ID_Number = ${ID_Number},
-                      @ID_Issue_Date = ${ID_Issue_Date},
-                      @ID_Expiry_Date = ${ID_Expiry_Date},
-                      @ID_Image = ${ID_Image},
-
-                      @License_No = ${License_No},
-                      @License_Image = ${License_Image},
-                      @Website = ${Website},
-                      @Report_Email = ${Report_Email},
-                      @Email = ${Email},
-                      @Bank_Code = ${Bank_Code},
+                      
+                      @Merchant_Name = '${Merchant_Name}',
+                      @Merchant_Nature =  ${Merchant_Nature},
+                      @Wallet_Type = ${Wallet_Type},
+                      @ID_Number = '${ID_Number}',
+                      @ID_Issue_Date = '${ID_Issue_Date}',
+                      @ID_Expiry_Date = '${ID_Expiry_Date}',
                     
-                      @Bank_Account_No = ${Bank_Account_No},
-                      @District = ${District},
-                      @Logo_Image = ${Logo_Image},
-                      @City = ${City},
-                      @Business_Contact_Name = ${Business_Contact_Name},
-                      @Business_Contact_Mobile = ${Business_Contact_Mobile},
-                      @Business_Contact_Phone = ${Business_Contact_Phone},
-                      @Business_Contact_Email = ${Business_Contact_Email},
-                      @Technical_Contact_Name = ${Technical_Contact_Name},
-                      @Technical_Contact_Mobile  = ${Technical_Contact_Mobile},
-                      @Technical_Contact_Phone = ${Technical_Contact_Phone},
-                      @Technical_Contact_Email = ${Technical_Contact_Email},
-                      @Account_Contact_Name = ${Account_Contact_Name},
-                      @Account_Contact_Mobile = ${Account_Contact_Mobile},
-                      @Account_Contact_Phone = ${Account_Contact_Phone },
-                      @Account_Contact_Email = ${Account_Contact_Email},
-                      @Bank_Address = ${Bank_Address},
-                      @Bank_Swift_Code = ${Bank_Swift_Code},
-                      @Bank_Branch_Code = ${Bank_Branch_Code},
-                      @Created_By = ${Created_By},
+
+                      @License_No = '${License_No}',
+                      @License_Image = '${License_Image}',
+                      @Website = '${Website}',
+                      @Report_Email = '${Report_Email}',
+                      @Email = '${Email}',
+                      @Bank_Code = '${Bank_Code}',
+                    
+                      @Bank_Account_No = '${Bank_Account_No}',
+                      @District = '${District}',
+                      @Logo_Image = '${Logo_Image}',
+                      @City = '${City}',
+                      @Business_Contact_Name = '${Business_Contact_Name}',
+                      @Business_Contact_Mobile = '${Business_Contact_Mobile}',
+                      @Business_Contact_Phone = '${Business_Contact_Phone}',
+                      @Business_Contact_Email = '${Business_Contact_Email}',
+                      @Technical_Contact_Name = '${Technical_Contact_Name}',
+                      @Technical_Contact_Mobile  = '${Technical_Contact_Mobile}',
+                      @Technical_Contact_Phone = '${Technical_Contact_Phone}',
+                      @Technical_Contact_Email = '${Technical_Contact_Email}',
+                      @Account_Contact_Name = '${Account_Contact_Name}',
+                      @Account_Contact_Mobile = '${Account_Contact_Mobile}',
+                      @Account_Contact_Phone = '${Account_Contact_Phone}',
+                      @Account_Contact_Email = '${Account_Contact_Email}',
+                      @Bank_Address = '${Bank_Address}',
+                      @Bank_Swift_Code = '${Bank_Swift_Code}',
+                      @Bank_Branch_Code = '${Bank_Branch_Code}',
                       @Status = ${Status},
-                      @Temp_Status = ${Temp_Status},
-                      @ID_Front_Image = ${ID_Front_Image},
-                      @ID_Back_Image = ${ID_Back_Image},
-                      @Latitude = ${Latitude},
-                      @Longitude = ${Longitude},
-                      @Communice = ${Communice},
-                      @Street_House_No = ${Street_House_No}
+                      @ID_Front_Image = '${ID_Front_Image}',
+                      @ID_Back_Image = '${ID_Back_Image}',
+                      @Latitude = '${Latitude}',
+                      @Longitude = '${Longitude}',
+                      @Communice = '${Communice}'
                       `).then(value => {
-
+          console.log(value, 'val')
         return res.status(200).send(OK(null, null, req));
-
       }).catch(e => {
-
         console.log(e)
         return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
       })
 
     }).catch(e => {
-
       console.log(e)
       return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     })
 
-
-  } catch (e) {
+  } catch (e){
     return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
   }
 })
