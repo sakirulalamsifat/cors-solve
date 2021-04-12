@@ -235,7 +235,7 @@ router.post('/update', async (req, res) => {
     const Temp_Status = 0, Status = 0
 
     MerchentProfile.findOne({ where: { MSISDN } }).then(async data => {
-      console.log(data, 'data')
+  
       let { ID_Image1, License_Image1, Logo_Image1, ID_Front_Image1, ID_Back_Image1 } = data
 
       ID_Image = ID_Image ? ID_Image : ID_Image1
@@ -292,19 +292,25 @@ router.post('/update', async (req, res) => {
                       @ID_Back_Image = '${ID_Back_Image}',
                       @Latitude = '${Latitude}',
                       @Longitude = '${Longitude}',
-                      @Communice = '${Communice}'
-                      `).then(value => {
-          console.log(value, 'val')
-        return res.status(200).send(OK(null, null, req));
-      }).catch(e => {
-        console.log(e)
-        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
-      })
+                      @Communice = '${Communice}'`).then(value => {
+
+
+                       const msg = value?value[0].Msg?value[0].Msg:null:null
+
+                     return res.status(200).send(OK(null, msg, req));
+
+
+              }).catch(e => {
+                console.log(e)
+                return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+              })
+
 
     }).catch(e => {
       console.log(e)
       return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     })
+
 
   } catch (e){
     return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
