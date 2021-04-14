@@ -82,6 +82,11 @@ const SW_TBL_PROFILE_MERCHANT_TEMP = sequelize.define('SW_TBL_PROFILE_MERCHANT_T
     Bank_Code:{
         type: DataTypes.TEXT,
     },
+
+    //new Added
+    Bank_Account_No:{
+        type: DataTypes.TEXT
+    },
     Last_Sweep_Date:{
         type: DataTypes.DATE,
     },
@@ -106,6 +111,11 @@ const SW_TBL_PROFILE_MERCHANT_TEMP = sequelize.define('SW_TBL_PROFILE_MERCHANT_T
     },
     Business_Contact_Mobile :{
         type: DataTypes.TEXT
+    },
+
+    //newadded
+    Business_Contact_Phone:{
+        type:DataTypes.TEXT
     },
     Business_Contact_Email:{
         type: DataTypes.TEXT

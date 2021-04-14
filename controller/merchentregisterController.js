@@ -1,0 +1,304 @@
+import express from 'express'
+import { OK, INTERNAL_SERVER_ERROR, BAD_REQUEST } from '../helpers/responseHelper'
+import { MerchentUserAuthTrack, MerchentProfile, SW_TBL_PROFILE_MERCHANT_TEMP, MerchentProfileUpdateConfig } from '../models'
+import { hassPasswordGenerate } from '../middleware'
+import sequelize from '../config/database'
+
+import path from "path";
+
+require('dotenv').config()
+
+var fs = require('fs');
+const router = express.Router()
+
+const imageupstorageLocation = process.env.imageupstorageLocation
+
+const fileName = OldName => {
+
+    return Date.now() + path.extname(OldName);
+
+
+};
+
+const DayWithLeadingZero = (d) => (d.getUTCDate() < 10 ? '0' : '') + d.getUTCDate()
+
+const DayOfMonthWithLeadingZero = (d) => ((d.getUTCMonth() + 1) < 10 ? '0' : '') + (d.getUTCMonth() + 1)
+
+const CurrentYearMonthDay = () => {
+    var dateObj = new Date();
+    var month = DayOfMonthWithLeadingZero(dateObj); //months from 01-12
+    var day = DayWithLeadingZero(dateObj);
+    var year = dateObj.getUTCFullYear();
+
+    return { year, month, day }
+
+}
+const FolderStructure = (OldName) => {
+
+    return new Promise(async (resolve, reject) => {
+
+        let { year, month, day } = CurrentYearMonthDay()
+
+        console.log(year, month, day)
+
+        const filename = `${Date.now()}_${year}-${month}-${day}${path.extname(OldName)}`
+
+        const foldername = `${imageupstorageLocation}/${year}/${month}/${day}`
+
+        if (!fs.existsSync(`${imageupstorageLocation}/${year}`)) {
+            await fs.mkdirSync(`${imageupstorageLocation}/${year}`);
+            await fs.mkdirSync(`${imageupstorageLocation}/${year}/${month}`);
+            await fs.mkdirSync(`${imageupstorageLocation}/${year}/${month}/${day}`);
+            resolve({ filename, foldername })
+        }
+        else if (!fs.existsSync(`${imageupstorageLocation}/${year}/${month}`)) {
+            await fs.mkdirSync(`${imageupstorageLocation}/${year}/${month}`);
+            await fs.mkdirSync(`${imageupstorageLocation}/${year}/${month}/${day}`);
+            resolve({ filename, foldername })
+        }
+        else if (!fs.existsSync(`${imageupstorageLocation}/${year}/${month}/${day}`)) {
+            await fs.mkdirSync(`${imageupstorageLocation}/${year}/${month}/${day}`);
+            resolve({ filename, foldername })
+        }
+
+        else {
+
+            resolve({ filename, foldername })
+        }
+
+    })
+}
+
+const allowedFileTypes = process.env.allowedFileTypes
+
+const FileUpload = async (req, res) => {
+
+    return new Promise(async (resolve, reject) => {
+
+        try {
+
+            if (req.files) {
+
+                const file = [];
+                const filesNamesArray = [];
+                const keyname = []
+                let index = 0, errorresponse = {}, iserror = false
+
+                if (req.files['ID_Image']) {
+
+                    file.push(req.files['ID_Image']);
+                    keyname.push('ID_Image')
+
+                }
+
+                if (req.files['License_Image']) {
+
+                    file.push(req.files['License_Image']);
+                    keyname.push('License_Image')
+
+                }
+
+                if (req.files['Logo_Image']) {
+
+                    file.push(req.files['Logo_Image']);
+                    keyname.push('Logo_Image')
+
+                }
+
+                if (req.files['ID_Front_Image']) {
+
+                    file.push(req.files['ID_Front_Image']);
+                    keyname.push('ID_Front_Image')
+
+                }
+
+                if (req.files['ID_Back_Image']) {
+
+                    file.push(req.files['ID_Back_Image']);
+                    keyname.push('ID_Back_Image')
+
+                }
+
+                for (const fileElement of file) {
+
+                    if (!allowedFileTypes.includes(fileElement.name.split(".").pop())) {
+
+                        errorresponse[keyname[index]] = `file formates are ${allowedFileTypes.toString()}`
+                        iserror = true
+
+                    }
+                    index++
+
+                }
+
+                if (iserror) {
+
+                    return res.status(400).send(BAD_REQUEST(null, errorresponse, req));
+                }
+
+                let fileElement, fileurl = null, i = 0, filemaneobj = {}, singlefile;
+                index = 0
+
+                for (let i = 0; i < file.length; i++) {
+
+                    singlefile = file[i]
+
+                    let { filename, foldername } = await FolderStructure(file[i].name)
+
+                    singlefile.mv(`${foldername}/` + filename, function (err) {
+
+                        // res.writeHead(200, {"Content-Type": "text/plain"});
+
+                        if (err) {
+                            console.log(err);
+
+                        } else {
+                            console.log("uploaded ", filename);
+
+                        }
+
+                    });
+
+                    filemaneobj[keyname[index]] = filename
+
+                    index++
+
+                }
+
+                resolve(filemaneobj)
+
+            }
+            else {
+
+                console.log('no file')
+                resolve({});
+            }
+
+        } catch (e) {
+            console.log('e ', e)
+            return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+        }
+    })
+}
+
+// router.get('/aluser', (req, res)=>{
+//   MerchentProfile.findAll({ where: { } }).then(user=>{
+//     res.json(user)
+//   })
+// })
+
+router.post('/register', async (req, res) => {
+
+    try {
+        let { ID_Image = null, License_Image = null, Logo_Image = null, ID_Front_Image = null, ID_Back_Image = null } = await FileUpload(req, res)
+
+        let {
+            MSISDN,
+            Merchant_Name,
+            Merchant_Nature,
+            ID_Type,
+            ID_Number,
+            Id_Issued_Place,
+            Id_Issued_Date,
+            ID_Expiry_Date,
+            // ID_image,
+            License_No,
+            // License_image,
+            Business_Type,
+            Email,
+            Bank_Code,
+            Bank_Account_No,
+            Sweep_Interval,
+            District,
+            // Logo_Image,
+            Bank_Address,
+            Bank_Swift_Code,
+            // ID_Front_image,
+            // ID_Back_Image,
+            Latitude,
+            Longitude,
+            Communice,
+            Street_House_No,
+            Branch_Code,
+            CommonBusinessName,
+            City
+        } = req.body
+
+        let Acc_Code = 'gen example acccode', Status = 0, Wallet_Type = 107, Keyword_Commission_ID = 1, Keyword_Charge_Id = 1, Merchant_Type = 'normal', IsCashOut = 0, Last_Sweep_Date = new Date(), Holding_Ammount = 0,
+            Created_By = 'business1', Created_Date = new Date(), Modified_By = 'business2', Modified_Date = new Date(), Reward = 1, Vat_Setting = '0', Is_Single_Number = 0, Is_visible_On_App = 0, Operation = 'gen opreaton',
+            Is_Agent_Payment = 0, Menu_Code = 'gen menucode', Is_Web_Login = 1, Enable_Sms_Notification = 1, Fail_Attempt = 0;
+
+        // console.log(MSISDN, Merchant_Name, Branch_Code, ID_Image, Is_Web_Login);
+
+        SW_TBL_PROFILE_MERCHANT_TEMP.create({
+            MSISDN,
+            Merchant_Name,
+            Merchant_Nature,
+            ID_Type,
+            ID_Number,
+            Id_Issued_Place,
+            //need add in database
+            Id_Issued_Date,
+            ID_Expiry_Date,
+            ID_Image,
+            License_No,
+            License_Image,
+            //need to add in database
+            Business_Type,
+            Email,
+            Bank_Code,
+            Bank_Account_No,
+            Sweep_Interval,
+            District,
+            Logo_Image,
+            Bank_Address,
+            Bank_Swift_Code,
+            ID_Front_Image,
+            ID_Back_Image,
+            Latitude,
+            Longitude,
+            Communice,
+            Street_House_No,
+            Branch_Code,
+            CommonBusinessName,
+            City,
+
+            Acc_Code,
+            Status,
+            Wallet_Type,
+            Keyword_Commission_ID,
+            Keyword_Charge_Id,
+            Merchant_Type,
+            IsCashOut,
+            // Last_Sweep_Date,
+            //need to add on database
+            Holding_Ammount,
+            Created_By,
+            // Created_Date,
+            Modified_By,
+            // Modified_Date,
+            Reward,
+            Vat_Setting,
+            Is_Single_Number,
+            Is_visible_On_App,
+            Operation,
+            Is_Agent_Payment,
+            Menu_Code,
+            Is_Web_Login,
+            Enable_Sms_Notification,
+            Fail_Attempt
+        }).then(value=>{
+            console.log(value)
+            res.json(value)
+        }).catch(error=>{
+            console.log(error)
+            res.json(error)
+        })
+
+    } catch (e) {
+        console.log(e)
+        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+    }
+})
+
+module.exports = router;

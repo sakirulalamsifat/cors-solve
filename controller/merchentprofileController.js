@@ -198,7 +198,7 @@ router.post('/update', async (req, res) => {
       Merchant_Name ,
       Merchant_Nature,
       Wallet_Type,
-
+      
       License_No,
       Website,
       Report_Email,
