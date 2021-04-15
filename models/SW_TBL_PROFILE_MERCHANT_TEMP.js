@@ -1,6 +1,6 @@
 
 
-import DataTypes, { BIGINT } from 'sequelize'
+import DataTypes, { BIGINT, TEXT } from 'sequelize'
 import sequelize from '../config/database'
 
 const SW_TBL_PROFILE_MERCHANT_TEMP = sequelize.define('SW_TBL_PROFILE_MERCHANT_TEMP', {
@@ -36,6 +36,20 @@ const SW_TBL_PROFILE_MERCHANT_TEMP = sequelize.define('SW_TBL_PROFILE_MERCHANT_T
     Id_Issued_Place:{
         type: DataTypes.TEXT,
     },
+    
+    
+    //new add -- neew to add in Database 
+    // Id_Issued_Date:{
+    //     type: DataTypes.TEXT
+    // },
+    // Business_Type:{
+    //     type:DataTypes.TEXT
+    // },
+    // Holding_Ammount:{
+    //     type:DataTypes.DOUBLE
+    // },
+
+
     ID_Expiry_Date:{
         type: DataTypes.TEXT,
     },

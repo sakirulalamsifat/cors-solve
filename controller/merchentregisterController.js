@@ -224,11 +224,11 @@ router.post('/register', async (req, res) => {
             City
         } = req.body
 
-        let Acc_Code = 'gen example acccode', Status = 0, Wallet_Type = 107, Keyword_Commission_ID = 1, Keyword_Charge_Id = 1, Merchant_Type = 'normal', IsCashOut = 0, Last_Sweep_Date = new Date(), Holding_Ammount = 0,
-            Created_By = 'business1', Created_Date = new Date(), Modified_By = 'business2', Modified_Date = new Date(), Reward = 1, Vat_Setting = '0', Is_Single_Number = 0, Is_visible_On_App = 0, Operation = 'gen opreaton',
-            Is_Agent_Payment = 0, Menu_Code = 'gen menucode', Is_Web_Login = 1, Enable_Sms_Notification = 1, Fail_Attempt = 0;
+        let Acc_Code = Math.floor((Math.random()*1000000)+1), Status = 0, Wallet_Type = 107, Keyword_Commission_ID = 1, Keyword_Charge_Id = 1, Merchant_Type = 'Normal', IsCashOut = 0, Last_Sweep_Date =sequelize.literal("getdate()"), Holding_Ammount = 0,
+            Created_By = 'business1', Created_Date = sequelize.literal("getdate()"), Modified_By = 'business2', Modified_Date = new Date(), Reward = 1, Vat_Setting = '0', Is_Single_Number = 0, Is_visible_On_App = 0, Operation = Math.floor((Math.random()*1000000)+1),
+            Is_Agent_Payment = 0, Menu_Code = Math.floor((Math.random()*1000000)+1), Is_Web_Login = 1, Enable_Sms_Notification = 1, Fail_Attempt = 0;
 
-        // console.log(MSISDN, Merchant_Name, Branch_Code, ID_Image, Is_Web_Login);
+        console.log(typeof(Created_Date), Last_Sweep_Date, 'date now');
 
         SW_TBL_PROFILE_MERCHANT_TEMP.create({
             MSISDN,
@@ -237,7 +237,7 @@ router.post('/register', async (req, res) => {
             ID_Type,
             ID_Number,
             Id_Issued_Place,
-            //need add in database
+            //need to add in database
             Id_Issued_Date,
             ID_Expiry_Date,
             ID_Image,
@@ -270,11 +270,11 @@ router.post('/register', async (req, res) => {
             Keyword_Charge_Id,
             Merchant_Type,
             IsCashOut,
-            // Last_Sweep_Date,
+            Last_Sweep_Date,
             //need to add on database
             Holding_Ammount,
             Created_By,
-            // Created_Date,
+            Created_Date,
             Modified_By,
             // Modified_Date,
             Reward,
@@ -289,10 +289,10 @@ router.post('/register', async (req, res) => {
             Fail_Attempt
         }).then(value=>{
             console.log(value)
-            res.json(value)
+            return res.status(200).send(OK(value, null, req));
         }).catch(error=>{
             console.log(error)
-            res.json(error)
+            return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
         })
 
     } catch (e) {
