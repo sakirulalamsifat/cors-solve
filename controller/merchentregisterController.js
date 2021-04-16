@@ -226,15 +226,32 @@ router.post('/register', async (req, res) => {
 
         const currentDate = sequelize.literal("getdate()")
 
-        Sweep_Interval = +Sweep_Interval
-        var addingdaysformattedinsql = sequelize.literal("GETDATE() + " + Sweep_Interval)
+         Sweep_Interval = +Sweep_Interval
+         var addingdaysformattedinsql = sequelize.literal("GETDATE() + "+Sweep_Interval)
 
 
-        let Acc_Code = Math.floor((Math.random() * 1000000) + 1), Status = 0, Wallet_Type = 107, Keyword_Commission_ID = 1, Keyword_Charge_Id = 1, Merchant_Type = 'Normal', IsCashOut = 0, Last_Sweep_Date = addingdaysformattedinsql, Holding_Ammount = 0,
-            Created_By = 'business1', Created_Date = currentDate, Modified_By = 'business2', Reward = 1, Vat_Setting = '0', Is_Single_Number = 0, Is_visible_On_App = 0, Operation = Math.floor((Math.random() * 1000000) + 1),
-            Is_Agent_Payment = 0, Menu_Code = Math.floor((Math.random() * 1000000) + 1), Is_Web_Login = 1, Enable_Sms_Notification = 1, Fail_Attempt = 0;
-
-        console.log(typeof (Created_Date), Last_Sweep_Date, 'date now');
+        let Acc_Code = Math.floor((Math.random()*1000000)+1), 
+        Status = 0, 
+        Wallet_Type = 107,
+         Keyword_Commission_ID = 1,
+          Keyword_Charge_Id = 1,
+           Merchant_Type = 'Normal', 
+           IsCashOut = 0, 
+           Last_Sweep_Date=addingdaysformattedinsql, 
+           Holding_Ammount = 0,
+            Created_By = 'business1',
+             Created_Date = currentDate,
+             Modified_By = 'business2',
+              Reward = 1, 
+              Vat_Setting = '0', 
+              Is_Single_Number = 0, 
+              Is_visible_On_App = 0, 
+              Operation = Math.floor((Math.random()*1000000)+1),
+            Is_Agent_Payment = 0,
+             Menu_Code = Math.floor((Math.random()*1000000)+1),
+              Is_Web_Login = 1, 
+              Enable_Sms_Notification = 1, 
+              Fail_Attempt = 0;
 
         SW_TBL_PROFILE_MERCHANT_TEMP.create({
             MSISDN,
@@ -293,10 +310,10 @@ router.post('/register', async (req, res) => {
             Is_Web_Login,
             Enable_Sms_Notification,
             Fail_Attempt
-        }).then(value => {
+        }).then(value=>{
             console.log(value)
             return res.status(200).send(OK(null, null, req));
-        }).catch(error => {
+        }).catch(error=>{
             console.log(error)
             return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
         })
