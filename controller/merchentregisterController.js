@@ -232,7 +232,7 @@ router.post('/register', async (req, res) => {
         var addingdaysformattedinsql = sequelize.literal("GETDATE() + " + Sweep_Interval)
 
 
-        let Acc_Code = Math.floor((Math.random() * 1000000) + 1),
+        let Acc_Code = 'M'+Math.floor((Math.random() * 1000000) + 1).toString(),
             Status = 0,
             Wallet_Type = 107,
             Keyword_Commission_ID = 1,
@@ -248,12 +248,13 @@ router.post('/register', async (req, res) => {
             Vat_Setting = '0',
             Is_Single_Number = 0,
             Is_visible_On_App = 0,
-            Operation = Math.floor((Math.random() * 1000000) + 1),
+            Operation = 'Insert',
             Is_Agent_Payment = 0,
-            Menu_Code = Math.floor((Math.random() * 1000000) + 1),
+            Menu_Code = null,
             Is_Web_Login = 1,
             Enable_Sms_Notification = 1,
-            Fail_Attempt = 0;
+            Fail_Attempt = 0,
+            Temp_Status = 0
 
         SW_TBL_PROFILE_MERCHANT_TEMP.create({
             MSISDN,
@@ -311,20 +312,12 @@ router.post('/register', async (req, res) => {
             Menu_Code,
             Is_Web_Login,
             Enable_Sms_Notification,
-<<<<<<< HEAD
             Fail_Attempt,
             Temp_Status
-        }).then(value => {
-            console.log(value)
-            return res.status(200).send(OK(value, null, req));
-        }).catch(error => {
-=======
-            Fail_Attempt
         }).then(value=>{
             console.log(value)
-            return res.status(200).send(OK(null, null, req));
+            return res.status(200).send(OK(value, null, req));
         }).catch(error=>{
->>>>>>> 5b8b8a7090f5ba09e634ab0188978e1c79562ada
             console.log(error)
             return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
         })
