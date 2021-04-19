@@ -199,7 +199,7 @@ router.post('/register', async (req, res) => {
             ID_Type,
             ID_Number,
             Id_Issued_Place,
-            Id_Issued_Date,
+            ID_Issue_Date,
             ID_Expiry_Date,
             // ID_image,
             License_No,
@@ -224,17 +224,19 @@ router.post('/register', async (req, res) => {
             City
         } = req.body
 
+        console.log(req.body.Id_Issued_Date)
+
         const currentDate = sequelize.literal("getdate()")
 
         Sweep_Interval = +Sweep_Interval
         var addingdaysformattedinsql = sequelize.literal("GETDATE() + " + Sweep_Interval)
 
 
-        let Acc_Code = Math.floor((Math.random() * 1000000) + 1), Status = 0, Wallet_Type = 107, Keyword_Commission_ID = 1, Keyword_Charge_Id = 1, Merchant_Type = 'Normal', IsCashOut = 0, Last_Sweep_Date = addingdaysformattedinsql, Holding_Ammount = 0,
-            Created_By = 'business1', Created_Date = currentDate, Modified_By = 'business2', Reward = 1, Vat_Setting = '0', Is_Single_Number = 0, Is_visible_On_App = 0, Operation = Math.floor((Math.random() * 1000000) + 1),
-            Is_Agent_Payment = 0, Menu_Code = Math.floor((Math.random() * 1000000) + 1), Is_Web_Login = 1, Enable_Sms_Notification = 1, Fail_Attempt = 0;
+        let Acc_Code = 'M'+ Math.floor((Math.random() * 1000000) + 1).toString(), Status = 0, Wallet_Type = 107, Keyword_Commission_ID = 1, Keyword_Charge_Id = 1, Merchant_Type = 'Normal', IsCashOut = 0, Last_Sweep_Date = addingdaysformattedinsql, Holding_Ammount = 0,
+            Created_By = 'business1', Created_Date = currentDate, Modified_By = 'business2', Reward = 1, Vat_Setting = '0', Is_Single_Number = 0, Is_visible_On_App = 0, Operation = 'Insert',
+            Is_Agent_Payment = 0, Menu_Code = null, Is_Web_Login = 1, Enable_Sms_Notification = 1, Fail_Attempt = 0, Temp_Status = 0;
 
-        console.log(typeof (Created_Date), Last_Sweep_Date, 'date now');
+        console.log(Created_Date, Last_Sweep_Date, 'date now');
 
         SW_TBL_PROFILE_MERCHANT_TEMP.create({
             MSISDN,
@@ -244,13 +246,13 @@ router.post('/register', async (req, res) => {
             ID_Number,
             Id_Issued_Place,
             //need to add in database
-            // Id_Issued_Date,
+            ID_Issue_Date,
             ID_Expiry_Date,
             ID_Image,
             License_No,
             License_Image,
             //need to add in database
-            Business_Type,
+            // Business_Type,
             Email,
             Bank_Code,
             Bank_Account_No,
@@ -278,7 +280,7 @@ router.post('/register', async (req, res) => {
             IsCashOut,
             Last_Sweep_Date,
             //need to add on database
-            Holding_Ammount,
+            // Holding_Ammount,
             Created_By,
             Created_Date,
             Modified_By,
@@ -292,10 +294,11 @@ router.post('/register', async (req, res) => {
             Menu_Code,
             Is_Web_Login,
             Enable_Sms_Notification,
-            Fail_Attempt
+            Fail_Attempt,
+            Temp_Status
         }).then(value => {
             console.log(value)
-            return res.status(200).send(OK(null, null, req));
+            return res.status(200).send(OK(value, null, req));
         }).catch(error => {
             console.log(error)
             return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
