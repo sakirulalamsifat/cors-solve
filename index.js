@@ -11,6 +11,7 @@ import fileupload from 'express-fileupload';
 import {localize,checkAuthorizaion,checkInvalidInput} from './middleware';
 import Authentication from './controller/authentication'
 import  MerchentRegisterController from './controller/merchentregisterController'
+import AddressController from './controller/addressController'
 
 const app = express();
 const PORT = process.env.PORT|| 2000;
@@ -49,7 +50,7 @@ app.use(fileupload({
 }));
 
 
-
+app.use("/api/address/",AddressController)
 app.use("/api/auth/",Authentication);
 
 app.use("/api/merchent/", MerchentRegisterController)
