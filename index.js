@@ -12,6 +12,7 @@ import {localize,checkAuthorizaion,checkInvalidInput} from './middleware';
 import Authentication from './controller/authentication'
 import  MerchentRegisterController from './controller/merchentregisterController'
 import AddressController from './controller/addressController'
+import PublicApiController from './controller/publicapiController'
 
 const app = express();
 const PORT = process.env.PORT|| 2000;
@@ -52,8 +53,9 @@ app.use(fileupload({
 
 app.use("/api/address/",AddressController)
 app.use("/api/auth/",Authentication);
-
+app.use('/api/public/', PublicApiController)
 app.use("/api/merchent/", MerchentRegisterController)
+
 
 //token check.....after below all route....
 

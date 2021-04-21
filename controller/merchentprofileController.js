@@ -1,8 +1,9 @@
 import express from 'express'
 import { OK, INTERNAL_SERVER_ERROR, BAD_REQUEST } from '../helpers/responseHelper'
-import { MerchentUserAuthTrack, MerchentProfile, SW_TBL_PROFILE_MERCHANT_TEMP, MerchentProfileUpdateConfig } from '../models'
+import { MerchentUserAuthTrack, MerchentProfile, SW_TBL_PROFILE_MERCHANT_TEMP, MerchentProfileUpdateConfig, SW_TBL_WALLET, SW_VW_MERCHANT_REPORT} from '../models'
 import { hassPasswordGenerate } from '../middleware'
 import sequelize from '../config/database'
+const { Op } = require("sequelize");
 
 import path from "path";
 
@@ -316,5 +317,43 @@ router.post('/update', async (req, res) => {
     return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
   }
 })
+
+router.post('/balance', (req, res)=>{
+  try{
+    let { Wallet_MSISDN } = req.body
+    SW_TBL_WALLET.findOne({
+      where: {
+        Wallet_MSISDN
+      }
+    }).then(value=>{
+      return res.status(200).send(OK(value.Amount, null, req));
+    })
+}catch(e){
+ console.log('e ', e)
+ return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+}
+})
+
+
+router.post('/merchentreport', (req, res)=>{
+  try{
+    let { Dest_Wallet_Id, startdate,enddate } = req.body
+
+
+
+    sequelize.query(`select * from SW_VW_MERCHANT_REPORT where Dest_Wallet_Id=${Dest_Wallet_Id} and Created_Date >= '${startdate} 00:00:00' and Created_Date <= '${enddate} 23:59:59' `, { type: sequelize.QueryTypes.SELECT})
+    .then(report => {
+     res.send(report)
+    })
+
+  }catch(e){
+   console.log('e ', e)
+   return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+  }
+
+ })
+
+
+
 
 module.exports = router;
