@@ -128,7 +128,6 @@ router.post('/merchenttransectionreport', (req, res)=>{
      console.log('e ', e)
      return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     }
-  
    })
 
  module.exports = router;
