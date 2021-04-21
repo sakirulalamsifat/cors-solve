@@ -68,11 +68,10 @@ router.post('/create_user', async (req, res) => {
 
 router.post('/update_user', async(req, res) => {
     try{
-        let {MSISDN, mobile, fullname, password, email } = req.body
+        let { mobile, fullname, password, email } = req.body
         console.log(req.body)
 
         const upvalues = {
-            mobile,
             fullname,
             email
         }
@@ -82,11 +81,12 @@ router.post('/update_user', async(req, res) => {
          }
 
         await MerchentUserAuthTrack.update(upvalues,{
-            where:{MSISDN}
+            where:{mobile}
         }).then(value=>{
             return res.status(200).send(OK(null, null, req));
         }).catch(error=>{
             console.log(error)
+            return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
         })
     }catch(e){
         console.log(e)
@@ -97,10 +97,10 @@ router.post('/update_user', async(req, res) => {
 
 router.post('/delete_user', async(req, res) => {
     try{
-        let {MSISDN } = req.body
+        let {mobile } = req.body
         MerchentUserAuthTrack.destroy({
             where: {
-                MSISDN
+                mobile
             }
         }).then(value=>{
             return res.status(200).send(OK(null, null, req));
