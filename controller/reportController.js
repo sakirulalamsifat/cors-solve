@@ -101,5 +101,34 @@ router.post('/upload',async(req,res)=>{
 })
 
 
+router.post('/merchenttransectionreport', (req, res)=>{
+
+    try{
+      let {startdate,enddate } = req.body
+      let {common_id:MSISDN} = req.user_info
+  
+      MSISDN = 17676160180
+      const query = `select * from SW_VW_MERCHANT_REPORT where Dest_Wallet_Id=${MSISDN} and Created_Date >= '${startdate} 00:00:00' and Created_Date <= '${enddate} 23:59:59' `
+       
+      console.log(query)
+     
+      sequelize.query( query)
+     
+      .then(report => {
+
+       return res.status(200).send(OK( report[0], null, req));
+
+      }).catch(e=>{
+
+        console.log(e)
+        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+      })
+  
+    }catch(e){
+     console.log('e ', e)
+     return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+    }
+  
+   })
 
  module.exports = router;

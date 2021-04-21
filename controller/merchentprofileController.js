@@ -335,25 +335,5 @@ router.post('/balance', (req, res)=>{
 })
 
 
-router.post('/merchentreport', (req, res)=>{
-  try{
-    let { Dest_Wallet_Id, startdate,enddate } = req.body
-
-
-
-    sequelize.query(`select * from SW_VW_MERCHANT_REPORT where Dest_Wallet_Id=${Dest_Wallet_Id} and Created_Date >= '${startdate} 00:00:00' and Created_Date <= '${enddate} 23:59:59' `, { type: sequelize.QueryTypes.SELECT})
-    .then(report => {
-     res.send(report)
-    })
-
-  }catch(e){
-   console.log('e ', e)
-   return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
-  }
-
- })
-
-
-
 
 module.exports = router;
