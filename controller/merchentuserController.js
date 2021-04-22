@@ -66,125 +66,71 @@ router.post('/create_user', async (req, res) => {
     }
 })
 
-router.post('/update_user', async(req, res) => {
-    try{
-        let { mobile, fullname, password, email } = req.body
-        console.log(req.body)
+router.post('/update_user', async (req, res) => {
 
-        const upvalues = {
-            fullname,
-            email
-        }
+    try {
+        let { mobile, fullname, password=null, email,status=1 } = req.body
 
-         if( password ){
-             upvalues.hasspass = await hassPasswordGenerate(password)
-         }
+        let { common_id: MSISDN } = req.user_info
 
-        await MerchentUserAuthTrack.update(upvalues,{
-            where:{mobile}
-        }).then(value=>{
+        const info = await MerchentUserAuthTrack.findOne({ where: { MSISDN: mobile } })
+
+        const hasspass = password?await hassPasswordGenerate(password) : info.password?info.password : null
+
+        MerchentUserAuthTrack.update({
+              fullname, 
+              password: hasspass,
+              email,
+              status
+             },{
+                 where:{
+                    MSISDN: mobile
+                 }
+             }).then(async data => {
+
             return res.status(200).send(OK(null, null, req));
-        }).catch(error=>{
-            console.log(error)
+
+
+        }).catch(e => {
+
+            console.log(e)
             return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
         })
-    }catch(e){
+
+
+    } catch (e) {
         console.log(e)
         return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     }
-
 })
 
-router.post('/delete_user', async(req, res) => {
-    try{
-        let {mobile } = req.body
+router.post('/delete_user', async (req, res) => {
+
+    try {
+        let { mobile } = req.body
+
         MerchentUserAuthTrack.destroy({
-            where: {
-                mobile
+            where:{
+                MSISDN: mobile
             }
-        }).then(value=>{
+        }).then(async data => {
+
             return res.status(200).send(OK(null, null, req));
-        }).catch(error=>{
-            console.log(error)
+
+
+        }).catch(e => {
+
+            console.log(e)
             return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
         })
 
-    }catch(e){
+
+    } catch (e) {
         console.log(e)
         return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     }
-
 })
 
-
-
-router.get('/active_user', async (req, res) => {
-
-    try {
-
-        let { mobile } = req.body
-
-        let { common_id: MSISDN } = req.user_info
-
-        const info = await MerchentUserAuthTrack.findOne({ where: { MSISDN: mobile, parent_id: MSISDN } })
-
-        if (!info) {
-
-            return res.status(400).send(BAD_REQUEST(req.i18n.__('usernotregistered'), null, req));
-
-        }
-
-
-        MerchentUserAuthTrack.update({ status: 1 }, { where: { MSISDN: mobile, parent_id: MSISDN } }).then(async data => {
-
-            return res.status(200).send(OK(null, null, req));
-
-
-        }).catch(e => {
-
-            console.log(e)
-            return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
-        })
-
-
-    } catch (e) {
-        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
-    }
-})
-
-router.get('/inactive_user', async (req, res) => {
-
-    try {
-
-        let { mobile } = req.body
-
-        let { common_id: MSISDN } = req.user_info
-
-        const info = await MerchentUserAuthTrack.findOne({ where: { MSISDN: mobile, parent_id: MSISDN } })
-
-        if (!info) {
-
-            return res.status(400).send(BAD_REQUEST(req.i18n.__('usernotregistered'), null, req));
-
-        }
-
-
-        MerchentUserAuthTrack.update({ status: 0 }, { where: { MSISDN: mobile, parent_id: MSISDN } }).then(async data => {
-
-            return res.status(200).send(OK(null, null, req));
-
-
-        }).catch(e => {
-
-            console.log(e)
-            return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
-        })
-
-
-    } catch (e) {
-        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
-    }
-})
 
 
 

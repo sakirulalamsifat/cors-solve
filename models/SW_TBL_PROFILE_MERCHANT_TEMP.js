@@ -31,7 +31,7 @@ const SW_TBL_PROFILE_MERCHANT_TEMP = sequelize.define('SW_TBL_PROFILE_MERCHANT_T
     },
     ID_Number:{
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true
     },
     Id_Issued_Place:{
         type: DataTypes.TEXT,
