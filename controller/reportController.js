@@ -107,7 +107,7 @@ router.post('/merchenttransectionreport', (req, res)=>{
       let {startdate,enddate } = req.body
       let {common_id:MSISDN} = req.user_info
   
-      MSISDN = 17676160180
+     
       const query = `select * from SW_VW_MERCHANT_REPORT where Dest_Wallet_Id=${MSISDN} and Created_Date >= '${startdate} 00:00:00' and Created_Date <= '${enddate} 23:59:59' `
        
       console.log(query)

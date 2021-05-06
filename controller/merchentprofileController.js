@@ -194,39 +194,39 @@ router.post('/update', async (req, res) => {
     let { ID_Image = null, License_Image = null, Logo_Image = null, ID_Front_Image = null, ID_Back_Image = null } = await FileUpload(req, res)
 
     let {
-      ID_Number,
-      Id_Issued_Place,
-      Merchant_Name ,
-      Merchant_Nature,
-      Wallet_Type,
+      ID_Number = null,
+      Id_Issued_Place =null,
+      Merchant_Name =null ,
+      Merchant_Nature = null,
+      Wallet_Type = null,
       
-      License_No,
-      Website,
-      Report_Email,
-      Email,
-      Bank_Code,
-      Bank_Account_No,
-      District,
-      City,
-      Business_Contact_Name,
-      Business_Contact_Mobile,
-      Business_Contact_Phone,
-      Business_Contact_Email,
-      Technical_Contact_Name,
-      Technical_Contact_Mobile,
-      Technical_Contact_Phone,
-      Technical_Contact_Email,
-      Account_Contact_Name,
-      Account_Contact_Mobile,
-      Account_Contact_Phone,
-      Account_Contact_Email,
-      Bank_Address,
-      Bank_Swift_Code,
-      Bank_Branch_Code,
-      Latitude,
-      Longitude,
-      Communice,
-      Street_House_No
+      License_No =null,
+      Website =null,
+      Report_Email = null,
+      Email = null,
+      Bank_Code = null,
+      Bank_Account_No = null,
+      District =null,
+      City = null,
+      Business_Contact_Name =null,
+      Business_Contact_Mobile = null,
+      Business_Contact_Phone = null,
+      Business_Contact_Email = null,
+      Technical_Contact_Name = null,
+      Technical_Contact_Mobile = null,
+      Technical_Contact_Phone = null,
+      Technical_Contact_Email = null,
+      Account_Contact_Name = null,
+      Account_Contact_Mobile = null,
+      Account_Contact_Phone = null,
+      Account_Contact_Email = null,
+      Bank_Address=null,
+      Bank_Swift_Code = null,
+      Bank_Branch_Code = null,
+      Latitude = null,
+      Longitude = null,
+      Communice = null,
+      Street_House_No = null
     } = req.body
 
     let ID_Issue_Date = new  Date(), ID_Expiry_Date = new Date();
@@ -237,7 +237,48 @@ router.post('/update', async (req, res) => {
 
     MerchentProfile.findOne({ where: { MSISDN } }).then(async data => {
   
-      let { ID_Image1, License_Image1, Logo_Image1, ID_Front_Image1, ID_Back_Image1 } = data
+      let { 
+          ID_Image:ID_Image1,
+          License_Image:License_Image1,
+          Logo_Image:Logo_Image1, 
+          ID_Front_Image:ID_Front_Image1,
+          ID_Back_Image: ID_Back_Image1,
+
+          ID_Number:ID_Number1 = null,
+          Id_Issued_Place:Id_Issued_Place1 =null,
+          Merchant_Name:Merchant_Name1 =null ,
+          Merchant_Nature :Merchant_Nature1= null,
+          Wallet_Type:Wallet_Type1 = null,
+          License_No :License_No1=null,
+          Website :Website1=null,
+          Report_Email :Report_Email1= null,
+          Email:Email1 = null,
+          Bank_Code:Bank_Code1 = null,
+          Bank_Account_No: Bank_Account_No1= null,
+          District :District1=null,
+          City:City1 = null,
+          Business_Contact_Name:Business_Contact_Name1 =null,
+          Business_Contact_Mobile :Business_Contact_Mobile1= null,
+          Business_Contact_Phone:Business_Contact_Phone1 = null,
+          Business_Contact_Email:Business_Contact_Email1 = null,
+          Technical_Contact_Name:Technical_Contact_Name1 = null,
+          Technical_Contact_Mobile:Technical_Contact_Mobile1 = null,
+          Technical_Contact_Phone:Technical_Contact_Phone1 = null,
+          Technical_Contact_Email:Technical_Contact_Email1 = null,
+          Account_Contact_Name:Account_Contact_Name1 = null,
+          Account_Contact_Mobile:Account_Contact_Mobile1 = null,
+          Account_Contact_Phone :Account_Contact_Phone1= null,
+          Account_Contact_Email :Account_Contact_Email1= null,
+          Communice:Communice1 = null,
+          Street_House_No:Street_House_No1 = null,
+
+          Bank_Address:Bank_Address1=null, 
+          Bank_Swift_Code:Bank_Swift_Code1 = null, 
+          Bank_Branch_Code :Bank_Branch_Code1= null,
+          Latitude :Latitude1= null,
+          Longitude:Longitude1 = null
+
+        } = data
 
       ID_Image = ID_Image ? ID_Image : ID_Image1
       License_Image = License_Image ? License_Image : License_Image1
@@ -249,6 +290,45 @@ router.post('/update', async (req, res) => {
 
       const Created_By = configinfo ? configinfo.createdbyname : 'bussiness1'
 
+      ID_Image = ID_Image?ID_Image:ID_Image1
+      License_Image = License_Image?License_Image:License_Image1
+      Logo_Image = Logo_Image?Logo_Image:Logo_Image1
+      ID_Front_Image = ID_Front_Image?ID_Front_Image:ID_Front_Image1
+      ID_Back_Image = ID_Back_Image?ID_Back_Image: ID_Back_Image1
+
+      ID_Number = ID_Number?ID_Number:ID_Number1 
+      Id_Issued_Place=Id_Issued_Place?Id_Issued_Place:Id_Issued_Place1 
+      Merchant_Name = Merchant_Name?Merchant_Name:Merchant_Name1  
+      Merchant_Nature  = Merchant_Nature?Merchant_Nature:Merchant_Nature1
+      Wallet_Type = Wallet_Type?Wallet_Type:Wallet_Type1 
+      License_No =License_No?License_No:License_No1
+      Website =Website?Website:Website1
+      Report_Email =Report_Email?Report_Email:Report_Email1
+      Email=Email?Email:Email1 
+      Bank_Code = Bank_Code?Bank_Code:Bank_Code1
+      Bank_Account_No = Bank_Account_No?Bank_Account_No: Bank_Account_No1
+      District =District?District:District1
+      City = City?City:City1 
+      Business_Contact_Name = Business_Contact_Name?Business_Contact_Name:Business_Contact_Name1 
+      Business_Contact_Mobile  = Business_Contact_Mobile?Business_Contact_Mobile:Business_Contact_Mobile1
+      Business_Contact_Phone = Business_Contact_Phone?Business_Contact_Phone:Business_Contact_Phone1 
+      Business_Contact_Email = Business_Contact_Email?Business_Contact_Email:Business_Contact_Email1 
+      Technical_Contact_Name = Technical_Contact_Name?Technical_Contact_Name:Technical_Contact_Name1 
+      Technical_Contact_Mobile = Technical_Contact_Mobile?Technical_Contact_Mobile:Technical_Contact_Mobile1 
+      Technical_Contact_Phone = Technical_Contact_Phone?Technical_Contact_Phone:Technical_Contact_Phone1 
+      Technical_Contact_Email = Technical_Contact_Email?Technical_Contact_Email:Technical_Contact_Email1 
+      Account_Contact_Name = Account_Contact_Name?Account_Contact_Name:Account_Contact_Name1 
+      Account_Contact_Mobile = Account_Contact_Mobile?Account_Contact_Mobile:Account_Contact_Mobile1 
+      Account_Contact_Phone  = Account_Contact_Phone?Account_Contact_Phone:Account_Contact_Phone1
+      Account_Contact_Email = Account_Contact_Email?Account_Contact_Email:Account_Contact_Email1
+      Communice = Communice?Communice:Communice1 
+      Street_House_No = Street_House_No?Street_House_No:Street_House_No1
+
+      Bank_Address = Bank_Address?Bank_Address:Bank_Address1
+      Bank_Swift_Code = Bank_Swift_Code?Bank_Swift_Code:Bank_Swift_Code1
+      Bank_Branch_Code  = Bank_Branch_Code?Bank_Branch_Code:Bank_Branch_Code1
+      Latitude  =Latitude?Latitude:Latitude1
+      Longitude = Longitude?Longitude:Longitude1 
 
       sequelize.query(`EXEC SW_PROC_MERCHANTS_PROFILE 
                       @flag = "U",
@@ -320,13 +400,13 @@ router.post('/update', async (req, res) => {
 
 router.post('/balance', (req, res)=>{
   try{
-    let { Wallet_MSISDN } = req.body
+      let {common_id:Wallet_MSISDN} = req.user_info
     SW_TBL_WALLET.findOne({
       where: {
         Wallet_MSISDN
       }
     }).then(value=>{
-      return res.status(200).send(OK(value.Amount, null, req));
+      return res.status(200).send(OK(value, null, req));
     })
 }catch(e){
  console.log('e ', e)

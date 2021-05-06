@@ -66,24 +66,27 @@ router.post('/create_user', async (req, res) => {
     }
 })
 
-router.get('/active_user', async (req, res) => {
+router.post('/update_user', async (req, res) => {
 
     try {
-
-        let { mobile } = req.body
+        let { mobile, fullname, password=null, email,status=1 } = req.body
 
         let { common_id: MSISDN } = req.user_info
 
-        const info = await MerchentUserAuthTrack.findOne({ where: { MSISDN: mobile, parent_id: MSISDN } })
+        const info = await MerchentUserAuthTrack.findOne({ where: { MSISDN: mobile } })
 
-        if (!info) {
+        const hasspass = password?await hassPasswordGenerate(password) : info.password?info.password : null
 
-            return res.status(400).send(BAD_REQUEST(req.i18n.__('usernotregistered'), null, req));
-
-        }
-
-
-        MerchentUserAuthTrack.update({ status: 1 }, { where: { MSISDN: mobile, parent_id: MSISDN } }).then(async data => {
+        MerchentUserAuthTrack.update({
+              fullname, 
+              password: hasspass,
+              email,
+              status
+             },{
+                 where:{
+                    MSISDN: mobile
+                 }
+             }).then(async data => {
 
             return res.status(200).send(OK(null, null, req));
 
@@ -96,28 +99,21 @@ router.get('/active_user', async (req, res) => {
 
 
     } catch (e) {
+        console.log(e)
         return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     }
 })
 
-router.get('/inactive_user', async (req, res) => {
+router.post('/delete_user', async (req, res) => {
 
     try {
-
         let { mobile } = req.body
 
-        let { common_id: MSISDN } = req.user_info
-
-        const info = await MerchentUserAuthTrack.findOne({ where: { MSISDN: mobile, parent_id: MSISDN } })
-
-        if (!info) {
-
-            return res.status(400).send(BAD_REQUEST(req.i18n.__('usernotregistered'), null, req));
-
-        }
-
-
-        MerchentUserAuthTrack.update({ status: 0 }, { where: { MSISDN: mobile, parent_id: MSISDN } }).then(async data => {
+        MerchentUserAuthTrack.destroy({
+            where:{
+                MSISDN: mobile
+            }
+        }).then(async data => {
 
             return res.status(200).send(OK(null, null, req));
 
@@ -130,9 +126,11 @@ router.get('/inactive_user', async (req, res) => {
 
 
     } catch (e) {
+        console.log(e)
         return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     }
 })
+
 
 
 

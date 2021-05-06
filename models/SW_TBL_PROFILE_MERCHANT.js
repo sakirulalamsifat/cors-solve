@@ -56,6 +56,14 @@ const SW_TBL_PROFILE_MERCHANT = sequelize.define('SW_TBL_PROFILE_MERCHANT', {
         type: DataTypes.TEXT,
         allowNull: true
     },
+   Latitude :{
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
+    Longitude :{
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
     License_Image:{
         type: DataTypes.TEXT,
         allowNull: true
