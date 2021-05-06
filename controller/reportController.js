@@ -1,6 +1,6 @@
 import express from 'express'
 import  {OK, INTERNAL_SERVER_ERROR,BAD_REQUEST} from '../helpers/responseHelper'
-import {MerchentUserAuthTrack,MerchentProfile,BulkPayment} from '../models'
+import {MerchentUserAuthTrack,MerchentProfile,BulkPayment,MerchentReportTemp} from '../models'
 import {base64fileUpload} from '../helpers/utilities'
 import sequelize from '../config/database'
 import 'dotenv/config'
@@ -107,7 +107,7 @@ router.post('/merchenttransectionreport', (req, res)=>{
       let {startdate,enddate } = req.body
       let {common_id:MSISDN} = req.user_info
   
-      MSISDN = 17676160180
+      //MSISDN = 17676160180
       const query = `select * from SW_VW_MERCHANT_REPORT where Dest_Wallet_Id=${MSISDN} and Created_Date >= '${startdate} 00:00:00' and Created_Date <= '${enddate} 23:59:59' `
        
       console.log(query)
@@ -129,6 +129,91 @@ router.post('/merchenttransectionreport', (req, res)=>{
      return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     }
   
-   })
+})
 
+router.post('/temporaryrefundmerchenttransection', (req, res)=>{
+
+    try{
+      let {transection_id} = req.body
+
+      let {common_id:MSISDN} = req.user_info
+
+      const query = `select * from SW_VW_MERCHANT_REPORT where Dest_Wallet_Id=${MSISDN} and Transaction_ID=${transection_id} `
+     
+      console.log(query)
+     
+      sequelize.query( query)
+     
+      .then(async report => {
+
+        if(report[0].length) {
+
+            const alreadyhave = await MerchentReportTemp.findOne({where:{Transaction_ID : transection_id}})
+           
+            if(alreadyhave) {
+
+                return res.status(200).send(OK( null, null, req));
+            }
+            else{
+
+                MerchentReportTemp.create({
+
+                    ...alreadyhave
+
+                }).then(report => {
+          
+                 return res.status(200).send(OK( null, null, req));
+          
+                }).catch(e=>{
+          
+                  console.log(e)
+                  return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+                })
+
+            }         
+
+        }
+        else{
+
+            return res.status(200).send(OK( null, null, req));
+        }
+
+      }).catch(e=>{
+
+        console.log(e)
+        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+      })
+
+  
+    }catch(e){
+     console.log('e ', e)
+     return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+    }
+  
+})
+
+router.post('/merchentpendingrefundtransection', (req, res)=>{
+
+    try{
+
+      let {common_id:MSISDN} = req.user_info
+     
+      MerchentReportTemp.findAll({ where: { Dest_Wallet_Id: MSISDN }})
+     
+      .then(report => {
+
+       return res.status(200).send(OK( report, null, req));
+
+      }).catch(e=>{
+
+        console.log(e)
+        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+      })
+  
+    }catch(e){
+     console.log('e ', e)
+     return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+    }
+  
+})
  module.exports = router;
