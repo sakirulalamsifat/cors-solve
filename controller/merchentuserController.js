@@ -36,7 +36,9 @@ router.get('/list', async (req, res) => {
 router.post('/create_user', async (req, res) => {
 
     try {
-        let { mobile, fullname, password, email, ismanager=false } = req.body
+        let { mobile, fullname, password, email, ismanager = 0 } = req.body
+
+        ismanager = ismanager ? 1 : 0
 
         let { common_id: MSISDN } = req.user_info
 

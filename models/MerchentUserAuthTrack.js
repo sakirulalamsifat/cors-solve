@@ -29,6 +29,10 @@ const MerchentUserAuthTrack = sequelize.define('MerchentUserAuthTrack', {
         type: DataTypes.SMALLINT,
         defaultValue:1
     },
+    ismanager:{
+        type: DataTypes.SMALLINT,
+        defaultValue: 0
+    },
     otp:{
         type: DataTypes.INTEGER
     },
