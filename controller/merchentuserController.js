@@ -36,7 +36,7 @@ router.get('/list', async (req, res) => {
 router.post('/create_user', async (req, res) => {
 
     try {
-        let { mobile, fullname, password, email } = req.body
+        let { mobile, fullname, password, email, ismanager=false } = req.body
 
         let { common_id: MSISDN } = req.user_info
 
@@ -50,7 +50,7 @@ router.post('/create_user', async (req, res) => {
 
         const hasspass = await hassPasswordGenerate(password)
 
-        MerchentUserAuthTrack.create({ MSISDN: mobile, fullname, password: hasspass, email, parent_id: MSISDN }).then(async data => {
+        MerchentUserAuthTrack.create({ MSISDN: mobile, fullname, password: hasspass, email, parent_id: MSISDN, ismanager }).then(async data => {
 
             return res.status(200).send(OK(null, null, req));
 

@@ -13,9 +13,10 @@ import SW_TBL_WALLET from './SW_TBL_WALLET'
 import MerchentBusinessType from './MerchentBusinessType'
 import MerchentNature from './MerchentNature'
 import SW_VW_MERCHANT_REPORT from './SW_VW_MERCHANT_REPORT'
+import MerchentReportTemp from './MerchentTransectionReportTemp'
 
 
 
 
-module.exports = {MerchentUserAuthTrack,MerchentProfile,BulkPayment,SmsRequestLog,
+module.exports = {MerchentUserAuthTrack,MerchentProfile,BulkPayment,SmsRequestLog,MerchentReportTemp,
     SW_TBL_PROFILE_MERCHANT_TEMP,MerchentProfileUpdateConfig, SW_TBL_CITY, SW_TBL_COUNTRY,SW_TBL_DISTRICT, SW_TBL_ID_TYPE, SW_TBL_WALLET, MerchentBusinessType, MerchentNature, SW_VW_MERCHANT_REPORT};
