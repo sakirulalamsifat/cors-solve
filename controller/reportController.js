@@ -158,7 +158,7 @@ router.post('/temporaryrefundmerchenttransection', (req, res)=>{
 
                 MerchentReportTemp.create({
 
-                    ...alreadyhave
+                    ...alreadyhave.dataValues
 
                 }).then(report => {
           

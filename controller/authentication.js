@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import {checkModule,checkAuthorizaion,hassPasswordGenerate,tokenGenerate,verifyPassword} from '../middleware';
 import {CustomerOtherInformationValidator,MobileValidator} from '../middleware/validator'
 import  {OK, INTERNAL_SERVER_ERROR,BAD_REQUEST} from '../helpers/responseHelper'
-import {MerchentUserAuthTrack,MerchentProfile,SmsRequestLog} from '../models'
+import {MerchentUserAuthTrack,MerchentProfile,SmsRequestLog, SW_TBL_JSONRX_REGISTRATION} from '../models'
 import {genRandomInRange,currenttimestamp,SecondDifferenceBetweenToDate} from '../helpers/utilities'
 import {Mail} from '../helpers/mail'
 import 'dotenv/config'
@@ -276,5 +276,48 @@ router.post('/login',checkModule,MobileValidator,async(req,res)=>{
         return  res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     }
  })
+
+ // for mobile app..fopr balance..
+
+ router.post('/applogin',checkModule,async(req,res)=>{
+
+    try{
+
+        console.log(req.body)
+
+        let {MSISDN,Device_Id,Phone_Brand,Phone_Os} = req.body
+        let login_datetime = new Date();
+        SW_TBL_JSONRX_REGISTRATION.findOne({
+            where:{
+                MSISDN,
+                Device_Id,
+                Phone_Brand,
+                Phone_Os
+            }
+        }).then(async data=>{
+
+            if(data) {
+
+                let token = await tokenGenerate({MSISDN,parent_id:MSISDN,common_id:MSISDN,login_datetime})
+
+                return res.status(200).send(OK({token},null, req))
+
+            }
+            else{
+                return res.status(400).send(BAD_REQUEST(req.i18n.__('unauthorized'), null, req));
+            }
+
+        }).catch(e=>{
+
+            console.log(e)
+            return  res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+        })       
+        
+    }catch(e){
+
+        console.log(e)
+        return  res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+    }
+})
 
 module.exports = router;

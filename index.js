@@ -14,6 +14,10 @@ import  MerchentRegisterController from './controller/merchentregisterController
 import AddressController from './controller/addressController'
 import PublicApiController from './controller/publicapiController'
 
+const https = require('https');
+const fs = require('fs');
+const {constants} = require('crypto');
+
 const app = express();
 const PORT = process.env.PORT|| 2000;
 const publicDir = process.env.publicDir
@@ -26,6 +30,20 @@ i18n.expressBind(app, {locales: [ 'en' ] })
 
 app.use(localize);
 
+const options = {
+    //secureOptions: constants.SSL_OP_NO_TLSv1 | constants.SSL_OP_NO_TLSv1_1,
+
+    key: fs.readFileSync('ssl/keyfile-encrypted.key'),
+    cert: fs.readFileSync('ssl/97580e4c070d1482.crt'),
+    ca: [ fs.readFileSync('ssl/gd1.crt')],
+    passphrase: "Mlajan@123##"
+
+    //...
+ //  key: fs.readFileSync('ssl/server.key'),
+ //  cert: fs.readFileSync('ssl/server.cert'),
+  // rejectunauthorized:false
+
+ };
 
 app.use(express.json({limit:'1024mb',strict:false}));
 app.use (checkInvalidInput);
@@ -74,12 +92,14 @@ app.post('/api/fackupload',(req,res)=>{return res.status(200).send(); })
 
  });
 
-
+ https.createServer(options,app).listen(PORT,()=>console.log(`app run on port ${PORT}`));
+ 
+ /*
 app.listen(PORT, () => {
 
     info(`🚀 Magic happens at port number ${PORT}`);
 
-});
+});*/
 
 
 
