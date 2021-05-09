@@ -15,9 +15,10 @@ import MerchentNature from './MerchentNature'
 import SW_VW_MERCHANT_REPORT from './SW_VW_MERCHANT_REPORT'
 import MerchentReportTemp from './MerchentTransectionReportTemp'
 import SW_TBL_JSONRX_REGISTRATION from './SW_TBL_JSONRX_REGISTRATION'
+import BulkPaymentReportTemp from './BulkPaymentReportTemp'
 
 
 
 
 module.exports = {SW_TBL_JSONRX_REGISTRATION,MerchentUserAuthTrack,MerchentProfile,BulkPayment,SmsRequestLog,MerchentReportTemp,
-    SW_TBL_PROFILE_MERCHANT_TEMP,MerchentProfileUpdateConfig, SW_TBL_CITY, SW_TBL_COUNTRY,SW_TBL_DISTRICT, SW_TBL_ID_TYPE, SW_TBL_WALLET, MerchentBusinessType, MerchentNature, SW_VW_MERCHANT_REPORT};
+    SW_TBL_PROFILE_MERCHANT_TEMP,MerchentProfileUpdateConfig,BulkPaymentReportTemp, SW_TBL_CITY, SW_TBL_COUNTRY,SW_TBL_DISTRICT, SW_TBL_ID_TYPE, SW_TBL_WALLET, MerchentBusinessType, MerchentNature, SW_VW_MERCHANT_REPORT};

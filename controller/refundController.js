@@ -36,7 +36,19 @@ router.post('/merchentrefundtransection', (req, res)=>{
 
                 Source_Wallet_ID = +Source_Wallet_ID
 
-                let query2 = `EXEC SW_PROC_MERCHANT_FULL_REVERSAL 
+                let query22 = `EXEC SW_PROC_MERCHANT_FULL_REVERSAL_NEW  @Flag = 'getRefundTxn',@Transaction_ID = ${Transaction_ID},@Reference_ID = '${Transaction_ID}',@Charge_Payer = ${Source_Wallet_ID}, @New_Charge_Amount = ${Amount}`
+
+                console.log(query22)
+
+                const check = await await sequelize.query(query22)
+                
+                if(check[0][0].Code == 128){
+
+                    return res.status(400).send(BAD_REQUEST(check[0][0].Msg, check[0][0].Msg, req));
+                }
+
+
+                let query2 = `EXEC SW_PROC_MERCHANT_FULL_REVERSAL_NEW 
         
                 @Flag = 'Reversal',
                 @Transaction_ID = ${uniqueID},

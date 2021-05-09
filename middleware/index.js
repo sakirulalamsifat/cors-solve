@@ -32,6 +32,8 @@ module.exports= {
    },
    checkAuthorizaion:async (req,res,next)=>{
 		let authorization = req.header("authorization")
+
+		console.log('token ', authorization)
 		
 		if(!authorization){ 
 			return  res.status(400).send(BAD_REQUEST( req.i18n.__('unauthorized'), null, req))

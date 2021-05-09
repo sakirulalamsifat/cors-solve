@@ -1,6 +1,6 @@
 import express from 'express'
 import  {OK, INTERNAL_SERVER_ERROR,BAD_REQUEST} from '../helpers/responseHelper'
-import {MerchentUserAuthTrack,MerchentProfile,BulkPayment,MerchentReportTemp} from '../models'
+import {MerchentUserAuthTrack,MerchentProfile,BulkPayment,MerchentReportTemp,BulkPaymentReportTemp} from '../models'
 import {base64fileUpload} from '../helpers/utilities'
 import sequelize from '../config/database'
 import 'dotenv/config'
@@ -41,8 +41,12 @@ const processcsvfile = async(MSISDN,csvurl)=>{
         })
         .on('end', () => {
 
-            BulkPayment.bulkCreate(dataforupload).then(data=>{
+            BulkPayment.bulkCreate(dataforupload).then(async data=>{
 
+                await BulkPaymentReportTemp.create({
+                    filename : fullurl,
+                    MSISDN
+                })
                 console.log('CSV file successfully processed');
 
             }).catch(e=>{
@@ -75,6 +79,50 @@ router.get('/reportlist',async(req,res)=>{
     }
 })
 
+router.post('/tempreportlist',async(req,res)=>{
+
+    try{
+
+        let {common_id:MSISDN} = req.user_info
+
+        BulkPaymentReportTemp.findAll({where:{MSISDN,status:0}}).then(data=>{
+
+            return res.status(200).send(OK( data, null, req));
+
+        }).catch(e=>{
+
+            console.log(e)
+            return  res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+        })
+
+    }catch(e){
+        console.log(e)
+        return  res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+    }
+})
+
+router.post('/updatestatusoftempreport',async(req,res)=>{
+
+    try{
+
+        let {id} = req.body
+
+        BulkPaymentReportTemp.update({status:1},{where:{id}}).then(data=>{
+
+            return res.status(200).send(OK( null, null, req));
+
+        }).catch(e=>{
+
+            console.log(e)
+            return  res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+        })
+
+    }catch(e){
+        console.log(e)
+        return  res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+    }
+})
+
 router.post('/upload',async(req,res)=>{
 
     try{
@@ -89,7 +137,7 @@ router.post('/upload',async(req,res)=>{
      
         if(!Url){ return res.status(400).send(BAD_REQUEST(req.i18n.__('corruptedfile'), null, req))  }
 
-        processcsvfile(MSISDN,Url)
+       await processcsvfile(MSISDN,Url)
 
         return res.status(200).send(OK( null, null, req));
 
