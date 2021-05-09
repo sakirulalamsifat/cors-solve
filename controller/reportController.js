@@ -158,7 +158,7 @@ router.post('/temporaryrefundmerchenttransection', (req, res)=>{
 
                 MerchentReportTemp.create({
 
-                    ...alreadyhave.dataValues
+                    ...report[0][0]
 
                 }).then(report => {
           
@@ -197,8 +197,13 @@ router.post('/merchentpendingrefundtransection', (req, res)=>{
     try{
 
       let {common_id:MSISDN} = req.user_info
+
+console.log(MSISDN)
      
-      MerchentReportTemp.findAll({ where: { Dest_Wallet_Id: MSISDN }})
+      MerchentReportTemp.findAll({ 
+          logging:console.log,
+          where: { Dest_Wallet_Id: MSISDN }
+        })
      
       .then(report => {
 

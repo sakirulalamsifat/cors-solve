@@ -39,10 +39,10 @@ const MerchentReportTemp = sequelize.define('MerchentReportTemp', {
         type: DataTypes.TEXT
     },
     Source_Wallet_ID:{
-        type: DataTypes.TEXT
+        type: DataTypes.BIGINT
     },
     Dest_Wallet_ID:{
-        type: DataTypes.TEXT
+        type: DataTypes.BIGINT
     },
     Charge_Payer:{
         type: DataTypes.TEXT

@@ -401,11 +401,13 @@ router.post('/update', async (req, res) => {
 router.post('/balance', (req, res)=>{
   try{
       let {common_id:Wallet_MSISDN} = req.user_info
+      console.log(Wallet_MSISDN)
     SW_TBL_WALLET.findOne({
       where: {
         Wallet_MSISDN
       }
     }).then(value=>{
+      console.log()
       return res.status(200).send(OK(value, null, req));
     })
 }catch(e){
