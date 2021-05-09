@@ -198,7 +198,7 @@ router.post('/merchentpendingrefundtransection', (req, res)=>{
 
       let {common_id:MSISDN} = req.user_info
 
-console.log(MSISDN)
+       console.log(MSISDN)
      
       MerchentReportTemp.findAll({ 
           logging:console.log,

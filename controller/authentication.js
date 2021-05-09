@@ -298,7 +298,7 @@ router.post('/login',checkModule,MobileValidator,async(req,res)=>{
 
             if(data) {
 
-                let token = await tokenGenerate({MSISDN,parent_id:MSISDN,common_id:MSISDN,login_datetime})
+                let token = await tokenGenerate({MSISDN,parent_id:MSISDN,common_id:MSISDN,applogin:true,login_datetime})
 
                 return res.status(200).send(OK({token},null, req))
 
