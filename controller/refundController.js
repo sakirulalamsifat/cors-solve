@@ -52,8 +52,10 @@ router.post('/merchentrefundtransection', (req, res)=>{
 
                         console.log('refund store procedure resoponse : ',v)
 
-                          await MerchentReportTemp.destroy({where: { Transaction_ID } })
-
+                        if(v[0][0].Code == 100){
+                            await MerchentReportTemp.destroy({where: { Transaction_ID } })
+                        }
+                          
                           return res.status(200).send(OK(v[0][0], v[0][0].Msg, req))
 
                       }).catch(e=>{
