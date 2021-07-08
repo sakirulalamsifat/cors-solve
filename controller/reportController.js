@@ -269,4 +269,43 @@ router.post('/merchentpendingrefundtransection', (req, res)=>{
     }
   
 })
+
+router.post('/customertransectionreport', (req, res)=>{
+
+    try{
+
+      let {Msisdn,FromDate,ToDate,Page,PageSize } = req.body 
+
+      Page = +Page;  
+      PageSize = +PageSize;  
+
+      const offset = PageSize * (Page - 1)
+
+      const query = `select t.*, k.Keyword_Description from SW_TBL_TRANSACTION t left join SW_TBL_KEYWORD k on t.Keyword = k.Keyword
+      where (t.Source_Wallet_ID=${Msisdn} or t.Dest_Wallet_ID=${Msisdn} ) and t.Created_Date >= '${FromDate} 00:00:00' and t.Created_Date <= '${ToDate} 23:59:59'
+      ORDER BY t.Created_Date DESC
+      OFFSET ${offset} ROWS
+      FETCH NEXT ${PageSize} ROWS ONLY `
+       
+      console.log(query)
+     
+      sequelize.query( query)
+     
+      .then(report => {
+
+       return res.status(200).send(OK( report[0], null, req));
+
+      }).catch(e=>{
+
+        console.log(e)
+        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+      })
+  
+    }catch(e){
+     console.log('e ', e)
+     return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+    }
+  
+})
+
  module.exports = router;

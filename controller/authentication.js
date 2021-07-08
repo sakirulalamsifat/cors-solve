@@ -222,10 +222,15 @@ router.post('/login',checkModule,MobileValidator,async(req,res)=>{
 
             if(is_match){
      
-              if(info.status){
+              if(info.status == 1){
      
                  somePartOfLogin(info,req,res)
      
+              }
+              else if (status == 2) {
+
+                return res.status(400).send(BAD_REQUEST(req.i18n.__('accountpendingmessage'), null, req));
+
               }
               else{
      

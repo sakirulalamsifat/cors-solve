@@ -27,7 +27,7 @@ const MerchentUserAuthTrack = sequelize.define('MerchentUserAuthTrack', {
     },
     status:{
         type: DataTypes.SMALLINT,
-        defaultValue:1
+        defaultValue:1 // 0 = lock, 1 = active, 2 = pending
     },
     ismanager:{
         type: DataTypes.SMALLINT,
@@ -46,6 +46,10 @@ const MerchentUserAuthTrack = sequelize.define('MerchentUserAuthTrack', {
     created_at:{
         type:DataTypes.DATE,
         defaultValue:sequelize.literal("getdate()")
+    },
+    created_by:{
+        type: DataTypes.BIGINT,
+        defaultValue : 0
     }
     
 }, {

@@ -65,5 +65,8 @@
 	"emptylandline":"landline must not empty",
 	"landlinetype":"landline must be numbers",
 	"filemissing":"File is required",
-	"corruptedfile":"File is corrupted"
+	"corruptedfile":"File is corrupted",
+	"accountpendingmessage" : "Your account is pending",
+	"cantnotapproved":"Approve not yet, you are the creator",
+	"alreadyapproved" :"Already approved !"
 }
