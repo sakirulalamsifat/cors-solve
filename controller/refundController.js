@@ -43,12 +43,12 @@ router.post('/merchentrefundtransection', (req, res)=>{
         let {common_id:MSISDN,applogin=false,ismanager=false} = req.user_info
         console.log(req.user_info)
 
-        if(applogin){
+       /* if(!applogin){
 
             if(!ismanager){
                 return res.status(400).send(BAD_REQUEST(req.i18n.__('unauthorized'), null, req));
             }
-        }
+        }*/
 
         Transaction_ID = +Transaction_ID
 

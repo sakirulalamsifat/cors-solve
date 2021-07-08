@@ -179,6 +179,35 @@ router.post('/merchenttransectionreport', (req, res)=>{
   
 })
 
+router.post('/totalmerchenttransectionreportcount', (req, res)=>{
+
+    try{
+
+     let {common_id:MSISDN} = req.user_info
+
+      const query = `select count(*) as total_transection, sum(Amount) as total_sell from SW_VW_MERCHANT_REPORT where Dest_Wallet_Id=${MSISDN} `
+       
+      console.log(query)
+     
+      sequelize.query( query)
+     
+      .then(report => {
+
+       return res.status(200).send(OK( report[0], null, req));
+
+      }).catch(e=>{
+
+        console.log(e)
+        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+      })
+  
+    }catch(e){
+     console.log('e ', e)
+     return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+    }
+  
+})
+
 router.post('/temporaryrefundmerchenttransection', (req, res)=>{
 
     try{
@@ -200,7 +229,8 @@ router.post('/temporaryrefundmerchenttransection', (req, res)=>{
            
             if(alreadyhave) {
 
-                return res.status(200).send(OK( null, null, req));
+                return res.status(400).send(BAD_REQUEST(req.i18n.__('alreadyhaverequest'), null, req));
+
             }
             else{
 

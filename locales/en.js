@@ -68,5 +68,6 @@
 	"corruptedfile":"File is corrupted",
 	"accountpendingmessage" : "Your account is pending",
 	"cantnotapproved":"Approve not yet, you are the creator",
-	"alreadyapproved" :"Already approved !"
+	"alreadyapproved" :"Already approved !",
+	"alreadyhaverequest" : "Already have a request"
 }
