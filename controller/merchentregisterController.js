@@ -344,11 +344,11 @@ router.post('/v2/register', async (req, res) => {
             ID_Issue_Date = null,
             ID_Expiry_Date = null,
             //image need to upload
-            ID_image,
-            License_image,
-            Logo_Image,
-            ID_Front_image,
-            ID_Back_Image,
+            ID_image = null,
+            License_image = null,
+            Logo_Image = null,
+            ID_Front_image = null,
+            ID_Back_Image = null,
             //image need to upload
             License_No = null,
             Business_Type,
