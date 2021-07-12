@@ -196,13 +196,13 @@ router.post('/register', async (req, res) => {
             MSISDN,
             Merchant_Name,
             Merchant_Nature,
-            ID_Type =null,
-            ID_Number =null,
-            Id_Issued_Place =null,
-            ID_Issue_Date=null,
-            ID_Expiry_Date=null,
+            ID_Type = null,
+            ID_Number = null,
+            Id_Issued_Place = null,
+            ID_Issue_Date = null,
+            ID_Expiry_Date = null,
             // ID_image,
-            License_No=null,
+            License_No = null,
             // License_image,
             Business_Type,
             Email,
@@ -232,7 +232,7 @@ router.post('/register', async (req, res) => {
         var addingdaysformattedinsql = sequelize.literal("GETDATE() + " + Sweep_Interval)
 
 
-        let Acc_Code = 'M'+Math.floor((Math.random() * 1000000) + 1).toString(),
+        let Acc_Code = 'M' + Math.floor((Math.random() * 1000000) + 1).toString(),
             Status = 0,
             Wallet_Type = 107,
             Keyword_Commission_ID = 1,
@@ -314,10 +314,154 @@ router.post('/register', async (req, res) => {
             Enable_Sms_Notification,
             Fail_Attempt,
             Temp_Status
-        }).then(value=>{
+        }).then(value => {
             console.log(value)
             return res.status(200).send(OK(value, null, req));
-        }).catch(error=>{
+        }).catch(error => {
+            console.log(error)
+            return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+        })
+
+    } catch (e) {
+        console.log(e)
+        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+    }
+})
+
+router.post('/v2/register', async (req, res) => {
+
+    try {
+        console.log("Hello world")
+        // let { ID_Image = null, License_Image = null, Logo_Image = null, ID_Front_Image = null, ID_Back_Image = null } = await FileUpload(req, res)
+
+        let {
+            MSISDN,
+            Merchant_Name,
+            Merchant_Nature,
+            ID_Type = null,
+            ID_Number = null,
+            Id_Issued_Place = null,
+            ID_Issue_Date = null,
+            ID_Expiry_Date = null,
+            //image need to upload
+            ID_image,
+            License_image,
+            Logo_Image,
+            ID_Front_image,
+            ID_Back_Image,
+            //image need to upload
+            License_No = null,
+            Business_Type,
+            Email,
+            Bank_Code,
+            Bank_Account_No,
+            Sweep_Interval,
+            District,
+            Bank_Address,
+            Bank_Swift_Code,
+            Latitude,
+            Longitude,
+            Communice,
+            Street_House_No,
+            Branch_Code,
+            CommonBusinessName,
+            City
+        } = req.body
+
+        console.log(req.body.Id_Issued_Date)
+
+        const currentDate = sequelize.literal("getdate()")
+
+        Sweep_Interval = +Sweep_Interval
+        var addingdaysformattedinsql = sequelize.literal("GETDATE() + " + Sweep_Interval)
+
+
+        let Acc_Code = 'M' + Math.floor((Math.random() * 1000000) + 1).toString(),
+            Status = 0,
+            Wallet_Type = 107,
+            Keyword_Commission_ID = 1,
+            Keyword_Charge_Id = 1,
+            Merchant_Type = 'Normal',
+            IsCashOut = 0,
+            Last_Sweep_Date = addingdaysformattedinsql,
+            Holding_Ammount = 0,
+            Created_By = 'business1',
+            Created_Date = currentDate,
+            Modified_By = 'business2',
+            Reward = 1,
+            Vat_Setting = '0',
+            Is_Single_Number = 0,
+            Is_visible_On_App = 0,
+            Operation = 'Insert',
+            Is_Agent_Payment = 0,
+            Menu_Code = null,
+            Is_Web_Login = 1,
+            Enable_Sms_Notification = 1,
+            Fail_Attempt = 0,
+            Temp_Status = 0
+
+        SW_TBL_PROFILE_MERCHANT_TEMP.create({
+            MSISDN,
+            Merchant_Name,
+            Merchant_Nature,
+            ID_Type,
+            ID_Number,
+            Id_Issued_Place,
+            //need to add in database
+            ID_Issue_Date,
+            ID_Expiry_Date,
+            ID_image,
+            License_No,
+            License_image,
+            //need to add in database
+            // Business_Type,
+            Email,
+            Bank_Code,
+            Bank_Account_No,
+            Sweep_Interval,
+            District,
+            Logo_Image,
+            Bank_Address,
+            Bank_Swift_Code,
+            ID_Front_image,
+            ID_Back_Image,
+            Latitude,
+            Longitude,
+            Communice,
+            Street_House_No,
+            Branch_Code,
+            CommonBusinessName,
+            City,
+
+            Acc_Code,
+            Status,
+            Wallet_Type,
+            Keyword_Commission_ID,
+            Keyword_Charge_Id,
+            Merchant_Type,
+            IsCashOut,
+            Last_Sweep_Date,
+            //need to add on database
+            // Holding_Ammount,
+            Created_By,
+            Created_Date,
+            Modified_By,
+            // Modified_Date,
+            Reward,
+            Vat_Setting,
+            Is_Single_Number,
+            Is_visible_On_App,
+            Operation,
+            Is_Agent_Payment,
+            Menu_Code,
+            Is_Web_Login,
+            Enable_Sms_Notification,
+            Fail_Attempt,
+            Temp_Status
+        }).then(value => {
+            console.log(value)
+            return res.status(200).send(OK(value, null, req));
+        }).catch(error => {
             console.log(error)
             return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
         })
