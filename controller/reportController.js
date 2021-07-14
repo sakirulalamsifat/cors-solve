@@ -169,7 +169,7 @@ router.post('/singletempfiledataapprove',async(req,res)=>{
                         }
                     })
 
-                    return res.status(200).send(OK( errordata, null, req))
+                    return res.status(200).send(OK( {dataforupload,errordata}, null, req))
 
 
             }).catch(e=>{
@@ -180,7 +180,7 @@ router.post('/singletempfiledataapprove',async(req,res)=>{
         }
         else {
 
-            return res.status(200).send(OK( errordata, 'There have no data to approve', req))
+            return res.status(200).send(OK( {dataforupload,errordata}, 'There have no data to approve', req))
         }
 
         }).catch(e=>{
