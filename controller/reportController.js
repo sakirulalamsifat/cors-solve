@@ -1,6 +1,6 @@
 import express from 'express'
 import  {OK, INTERNAL_SERVER_ERROR,BAD_REQUEST} from '../helpers/responseHelper'
-import {MerchentUserAuthTrack,MerchentProfile,BulkPayment,MerchentReportTemp,BulkPaymentReportTemp} from '../models'
+import {MerchentUserAuthTrack,MerchentProfile,BulkPayment,MerchentReportTemp,BulkPaymentReportTemp,BulkPaymentReportTempData} from '../models'
 import {base64fileUpload} from '../helpers/utilities'
 import sequelize from '../config/database'
 import 'dotenv/config'
@@ -12,7 +12,11 @@ const router = express.Router()
 
 const publicDir = process.env.publicDir
 
-const processcsvfile = async(MSISDN,csvurl)=>{
+String.prototype.isNumber = function(){return /^\d+$/.test(this);}
+
+const processcsvfile = async(MSISDN,csvurl,uploaded_by)=>{
+
+    return new Promise((resolve, reject) => {
 
     const fullurl = csvurl
     csvurl = csvurl.split(process.env.host)
@@ -41,20 +45,25 @@ const processcsvfile = async(MSISDN,csvurl)=>{
         })
         .on('end', () => {
 
-            BulkPayment.bulkCreate(dataforupload).then(async data=>{
+           // BulkPayment.bulkCreate(dataforupload).then(async data=>{
+            BulkPaymentReportTempData.bulkCreate(dataforupload).then(async data=>{
 
                 await BulkPaymentReportTemp.create({
                     filename : fullurl,
-                    MSISDN
+                    MSISDN,
+                    uploaded_by
                 })
                 console.log('CSV file successfully processed');
+                resolve(dataforupload)
 
             }).catch(e=>{
 
                 console.log(e)
+                resolve([])
             })
 
-        });
+        })
+    })
 }
 
 router.get('/reportlist',async(req,res)=>{
@@ -101,6 +110,120 @@ router.post('/tempreportlist',async(req,res)=>{
     }
 })
 
+router.post('/singletempfiledata',async(req,res)=>{
+
+    try{
+
+        let {Upload_File_Name = null} = req.body
+
+        BulkPaymentReportTempData.findAll({where:{Upload_File_Name,status:0}}).then(data=>{
+
+            return res.status(200).send(OK( data, null, req));
+
+        }).catch(e=>{
+
+            console.log(e)
+            return  res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+        })
+
+    }catch(e){
+        console.log(e)
+        return  res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+    }
+})
+
+router.post('/singletempfiledataapprove',async(req,res)=>{
+
+    try{
+
+        let {Upload_File_Name = null} = req.body
+
+        BulkPaymentReportTempData.findAll({where:{Upload_File_Name,status:0}}).then(data=>{
+
+            let dataforupload = [], i = 0, errordata = [], ei = 0
+
+           data.forEach(item => {
+
+                if(item.Destination_Wallet_ID && ((item.Destination_Wallet_ID.replace(/\s/g, '')).length) == 11 && (item.Destination_Wallet_ID).isNumber()) {
+
+                    dataforupload[i++] = { 
+                        ...item.dataValues,
+                        Destination_Wallet_ID : item.Destination_Wallet_ID.replace(/\s/g, '')
+                    }
+                }
+                else {
+
+                    errordata[ei++] = { ...item.dataValues}
+                }
+
+            })
+
+            if(dataforupload.length) {
+
+                BulkPayment.bulkCreate(dataforupload).then(async data=>{
+
+                    await BulkPaymentReportTemp.destroy({
+                    
+                        where : {
+                            filename : Upload_File_Name
+                        }
+                    })
+
+                    return res.status(200).send(OK( errordata, null, req))
+
+
+            }).catch(e=>{
+
+                console.log(e)
+                return  res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+            })
+        }
+        else {
+
+            return res.status(200).send(OK( errordata, 'There have no data to approve', req))
+        }
+
+        }).catch(e=>{
+
+            console.log(e)
+            return  res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+        })
+
+    }catch(e){
+        console.log(e)
+        return  res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+    }
+})
+
+router.post('/singletempfiledatareject',async(req,res)=>{
+
+    try{
+
+        let {Upload_File_Name = null} = req.body
+
+        await BulkPaymentReportTemp.destroy({
+                    
+            where : {
+                filename : Upload_File_Name
+            }
+        })
+
+        await BulkPaymentReportTempData.destroy({
+                    
+            where : {
+                Upload_File_Name
+            }
+        })
+
+        return res.status(200).send(OK( null, null, req))
+
+    }catch(e){
+
+        console.log(e)
+        return  res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+    }
+})
+
 router.post('/updatestatusoftempreport',async(req,res)=>{
 
     try{
@@ -129,7 +252,7 @@ router.post('/upload',async(req,res)=>{
 
         let {report_file} = req.body
 
-        let {common_id:MSISDN} = req.user_info
+        let {common_id:MSISDN, MSISDN : uploaded_by} = req.user_info
 
         if(!report_file){ return res.status(400).send(BAD_REQUEST(req.i18n.__('filemissing'), null, req)) }
    
@@ -137,9 +260,9 @@ router.post('/upload',async(req,res)=>{
      
         if(!Url){ return res.status(400).send(BAD_REQUEST(req.i18n.__('corruptedfile'), null, req))  }
 
-       await processcsvfile(MSISDN,Url)
+       const dataforupload = await processcsvfile(MSISDN,Url,uploaded_by)
 
-        return res.status(200).send(OK( null, null, req));
+        return res.status(200).send(OK( dataforupload, null, req));
 
 
     }catch(e){

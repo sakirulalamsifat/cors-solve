@@ -20,6 +20,30 @@ const sms_api_userid = process.env.sms_api_userid
 const sms_api_handle = process.env.sms_api_handle
 const sms_api_from = process.env.sms_api_from
 
+const getImageFullPath = async(Logo_Image=null)=>{
+
+    if(Logo_Image){
+
+        let logo = Logo_Image
+        //Logo_Image=9841245601_Merchant_Logo_Image202012220712295797_2020-12-22.png
+        const  split_array = Logo_Image.split('_')
+        //split_array = ['9841245601','Merchant','Logo','Image202012220712295797','2020-12-22.png']
+        const get_folder_composit_name = split_array[split_array.length-1].split('.')
+        //get_folder_composit_name= ['2020-12-22','png']
+        const folder_names = get_folder_composit_name[0].split('-')
+        //folder_names = ['2020','12','22',.....]
+        Logo_Image = process.env.host
+        folder_names.forEach((item,index)=>Logo_Image= `${Logo_Image}/${folder_names[index]}`)
+
+        return `${Logo_Image}/${logo}`
+
+    }
+    else{
+
+        return null
+    }
+
+}
 
 const SmsApi = (Destination_MSISDN,body)=>{
 
@@ -163,13 +187,19 @@ router.post('/check_otp',checkModule,MobileValidator,async(req,res)=>{
 
 const somePartOfLogin = async(user,req,res,use_temp_password=false)=>{
 
-    let{MSISDN,parent_id,fullname, ismanager} = user,login_datetime = new Date();
+    let{MSISDN,parent_id,fullname, ismanager} = user,login_datetime = new Date(), logo = null
     let is_merchent = parent_id?false:true
     let common_id = parent_id || MSISDN
 
     let token = await tokenGenerate({MSISDN,parent_id,fullname,is_merchent,ismanager,common_id,login_datetime})
 
-    return res.status(200).send(OK( {user_info:{MSISDN,fullname,is_merchent,ismanager},token},null, req));
+    const merchentinfo = await MerchentProfile.findOne({where:{MSISDN:common_id}})
+    
+    if(merchentinfo) {
+         logo = merchentinfo.Logo_Image ? await getImageFullPath(merchentinfo.Logo_Image) : null
+    }
+
+    return res.status(200).send(OK( {user_info:{MSISDN,fullname,is_merchent,ismanager, logo},token},null, req));
 }
 
 router.post('/set_password',checkModule,MobileValidator,async(req,res)=>{

@@ -20,7 +20,7 @@ const {constants} = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT|| 2000;
-const publicDir = process.env.publicDir
+const publicDir = process.env.imageupstorageLocation
 const [ info, errorLog, debugLog ]= [ debug('info'), debug('warning'), debug('warnning') ];
 
 
@@ -48,7 +48,7 @@ const options = {
 app.use(express.json({limit:'1024mb',strict:false}));
 app.use (checkInvalidInput);
 app.use(express.urlencoded({limit: '1024mb', extended: true}));
-app.use(express.static(__dirname+`/${publicDir}`));
+app.use(express.static(publicDir));
 
 
 app.use(morgan('dev'));

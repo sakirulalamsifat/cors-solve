@@ -20,6 +20,10 @@ const BulkPaymentReportTemp = sequelize.define('BulkPaymentReportTemp', {
     status: {
         type: DataTypes.SMALLINT,
         defaultValue:0
+    },
+    uploaded_by:{
+        type: DataTypes.BIGINT,
+        defaultValue : 0
     }
     
 }, {
