@@ -35,7 +35,7 @@ const processcsvfile = async(MSISDN,csvurl,uploaded_by)=>{
                 Destination_Wallet_ID:row['Destination_Wallet_ID'],
                 Amount:row['Amount'],
                 Keyword:'PMNT',
-                Date:sequelize.literal(`Convert(Date, '${row['Date']}')`),
+                Date: row['Date'],
                 Status:0,
                 Upload_File_Name:fullurl
 
@@ -147,8 +147,14 @@ router.post('/singletempfiledataapprove',async(req,res)=>{
                 if(item.Destination_Wallet_ID && ((item.Destination_Wallet_ID.replace(/\s/g, '')).length) == 11 && (item.Destination_Wallet_ID).isNumber()) {
 
                     dataforupload[i++] = { 
-                        ...item.dataValues,
-                        Destination_Wallet_ID : item.Destination_Wallet_ID.replace(/\s/g, '')
+
+                        Destination_Wallet_ID : item.Destination_Wallet_ID.replace(/\s/g, ''),
+                        Merchant_Wallet_ID: item.Merchant_Wallet_ID,
+                        Amount: item.Amount,
+                        Keyword: item.Keyword,
+                        Date:sequelize.literal(`Convert(Date, '${item.Date}')`),
+                        Status: item.Status,
+                        Upload_File_Name: item.Upload_File_Name
                     }
                 }
                 else {

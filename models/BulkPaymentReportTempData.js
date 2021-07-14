@@ -29,7 +29,7 @@ const BulkPaymentReportTempData = sequelize.define('BulkPaymentReportTempData', 
         defaultValue:'PMMP'
     },
     Date:{
-        type: DataTypes.DATE
+        type: DataTypes.STRING(20)
     },
     Transaction_ID:{
         type:DataTypes.BIGINT
