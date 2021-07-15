@@ -18,13 +18,18 @@ import MerchentReportTemp from './MerchentTransectionReportTemp'
 import SW_TBL_JSONRX_REGISTRATION from './SW_TBL_JSONRX_REGISTRATION'
 import BulkPaymentReportTemp from './BulkPaymentReportTemp'
 
+import  MerchentContact from './MerchentContact'
+import  MerchentContactGroup from './MerchentContactGroup'
+import MerchentContactGroupLink from './MerchentContactGroupLink'
 
 
+MerchentContactGroupLink.hasMany(MerchentContact,{targetKey: 'contact_id',sourceKey: 'id', foreignKey: 'id', as: 'merchent_contact'})
+MerchentContactGroup.belongsTo(MerchentContactGroupLink,{targetKey: 'group_id', foreignKey: 'id', as: 'contact_group'})
 
 module.exports = {
     SW_TBL_JSONRX_REGISTRATION,MerchentUserAuthTrack,MerchentProfile,
     BulkPayment,SmsRequestLog,MerchentReportTemp,BulkPaymentReportTempData,
     SW_TBL_PROFILE_MERCHANT_TEMP,MerchentProfileUpdateConfig,BulkPaymentReportTemp, 
     SW_TBL_CITY, SW_TBL_COUNTRY,SW_TBL_DISTRICT, SW_TBL_ID_TYPE, SW_TBL_WALLET, 
-    MerchentBusinessType, MerchentNature, SW_VW_MERCHANT_REPORT
+    MerchentBusinessType, MerchentNature, SW_VW_MERCHANT_REPORT,MerchentContact,MerchentContactGroup,MerchentContactGroupLink
 };
