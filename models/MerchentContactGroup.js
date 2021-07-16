@@ -4,12 +4,13 @@ import sequelize from '../config/database'
 const MerchentContactGroup = sequelize.define('MerchentContactGroup', {
     
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: false,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
     },
     group_name:{
-        type: DataTypes.TEXT
+        type: DataTypes.STRING(100)
     },
     created_by:{
         type: DataTypes.BIGINT,

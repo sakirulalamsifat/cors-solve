@@ -4,9 +4,10 @@ import sequelize from '../config/database'
 const MerchentContactGroupLink = sequelize.define('MerchentContactGroupLink', {
     
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: false,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
     },
     contact_id:{
         type: DataTypes.BIGINT

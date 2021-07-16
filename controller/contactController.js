@@ -7,6 +7,7 @@ import 'dotenv/config'
 const router = express.Router()
 
 router.post('/create_contact', async (req, res) => {
+    
     try {
         let { MSISDN, name } = req.body;
         let { common_id } = req.user_info
@@ -16,129 +17,177 @@ router.post('/create_contact', async (req, res) => {
             name,
             created_by: common_id
         }).then(data => {
+
             return res.status(200).send(OK(data, null, req))
+
         }).catch(error => {
+
             console.log(error)
             return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
         })
     }
     catch (e) {
+
         console.log(e)
         return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     }
 })
 
 router.get('/contact_list', (req, res) => {
+    
     try {
+
         let { common_id } = req.user_info
+
         MerchentContact.findAll({ where: { created_by: common_id } }).then(contacts => {
+           
             return res.status(200).send(OK(contacts, null, req))
-        })
-            .catch(e => {
+       
+        }).catch(e => {
+
                 console.log(e)
                 return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
-            })
+        })
     }
     catch (e) {
+
         console.log(e)
         return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     }
 })
 
 router.post('/create_group', async (req, res) => {
+    
     try {
-        let { group_name, contact_list } = req.body
+        let { group_name } = req.body
         let { common_id } = req.user_info
 
         MerchentContactGroup.create({
             group_name,
             created_by: common_id
-        }).then(async data => {
-            contact_list.map(v => {
-                v.group_id = data.group_id,
-                    v.created_by = common_id
-            })
 
-            await MerchentContactGroupLink.bulkCreate(contact_list)
+        }).then(async data => {
+
+            return res.status(200).send(OK(data, null, req))
 
         }).catch(error => {
+
             console.log(error)
             return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
         })
     }
     catch (e) {
+
         console.log(e)
-        return res.status(200).send(OK(null, null, req))
         return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     }
 })
 
-router.post('/group_by_id', (req, res) => {
+router.get('/group_list', async (req, res) => {
+    
+    try {
+
+        let { common_id } = req.user_info
+
+        MerchentContactGroup.findAll({
+           
+            where : {
+                created_by: common_id
+            }
+           
+        }).then(async data => {
+
+            return res.status(200).send(OK(data, null, req))
+
+        }).catch(error => {
+
+            console.log(error)
+            return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+        })
+    }
+    catch (e) {
+
+        console.log(e)
+        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+    }
+})
+
+router.post('/contact_group_link', async (req, res) => {
+    
+    try {
+
+        let {group_id, contact_ids = []} = req.body
+
+        let { common_id } = req.user_info
+
+        if(!contact_ids.length) {
+
+            return res.status(400).send(BAD_REQUEST(req.i18n.__('contactsrequired'), null, req));
+
+        }
+
+        const insertdata = contact_ids.map(item => {
+
+            return {
+                contact_id : item,
+                group_id,
+                created_by : common_id
+            }
+        })
+
+        MerchentContactGroupLink.bulkCreate(insertdata).then(async data => {
+
+            return res.status(200).send(OK(null, null, req))
+
+        }).catch(error => {
+
+            console.log(error)
+            return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+        })
+    }
+    catch (e) {
+
+        console.log(e)
+        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+    }
+})
+
+router.post('/contacts_by_group_id', (req, res) => {
     try {
         let { group_id } = req.body
 
-        MerchentContactGroupLink.findOne({
+        MerchentContactGroupLink.findAll({
+            where : {group_id},
             include: [
-                {
-                    model: MerchentContactGroup,
-                    as: 'contact_group',
-                },
+          
                 {
                     model: MerchentContact,
                     as: 'merchent_contact',
                 }
-            ],
-            where: {
-                created_by: common_id
-            }
+            ]
         }).then(data => {
+
             return res.status(200).send(OK(data, null, req))
+
         }).catch(error => {
+
             console.log(error)
             return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
         })
     }
     catch (error) {
+
         console.log(error)
         return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     }
 })
 
-router.get('/contact_group', (req, res) => {
-    try {
-        let { common_id } = req.user_info
-
-        MerchentContactGroupLink.findAll({
-            include: [
-                {
-                    model: MerchentContactGroup,
-                    as: 'contact_group',
-                },
-                {
-                    model: MerchentContact,
-                    as: 'merchent_contact',
-                }
-            ],
-            where: {
-                created_by: common_id
-            }
-        })
-            .then(contacts => {
-                return res.status(200).send(OK(contacts, null, req))
-            }).catch(error => {
-                console.log(error)
-                return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
-            })
-    }
-    catch (e) {
-        console.log(e)
-        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
-    }
-})
 
 router.post('/delete_group', async (req, res)=>{
+    
     try{
         let { group_id } = req.body
+
         MerchentContactGroup.destroy({
             where: {
                 id: group_id
@@ -146,40 +195,45 @@ router.post('/delete_group', async (req, res)=>{
         }).then(data=>{
             MerchentContactGroupLink.destroy({
                 where:{
-                    group_id: group_id
+                    group_id
                 }
             }).then(values=>{
+
                 return res.status(200).send(OK(null, null, req))
+
             }).catch(error=>{
+
                 console.log(error)
                 return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
             })
         }).catch(error=>{
+
             console.log(error)
             return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
         })
     }
     catch(e){
+
         console.log(e)
         return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     }
 })
 
 router.post('/delete_contatc', async(req, res)=>{
+   
     try{
         let { contact_id } = req.body
 
-        let merchentGroupData = await MerchentContactGroupLink.findOne({where:{contact_id: contact_id}})
-        let merchentContactGroupData = await MerchentContactGroup.findOne({where:{ group_id: merchentGroupData.group_id}})
+        await MerchentContactGroupLink.findOne({where:{contact_id}})
 
         await MerchentContact.destroy({where: {id: contact_id}})
-        await MerchentContactGroupLink.destroy.destroy({where:{ contact_id: contact_id}})
-        await MerchentContactGroup.destroy({where:{ id: merchentContactGroupData.id}})
 
         return res.status(200).send(OK(null, null, req))
     }
     catch(error){
+
         console.log(error)
+        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     }
 })
 

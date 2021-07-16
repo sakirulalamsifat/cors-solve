@@ -23,8 +23,9 @@ import  MerchentContactGroup from './MerchentContactGroup'
 import MerchentContactGroupLink from './MerchentContactGroupLink'
 
 
-MerchentContactGroupLink.hasMany(MerchentContact,{targetKey: 'contact_id',sourceKey: 'id', foreignKey: 'id', as: 'merchent_contact'})
-MerchentContactGroup.belongsTo(MerchentContactGroupLink,{targetKey: 'group_id', foreignKey: 'id', as: 'contact_group'})
+MerchentContact.hasMany(MerchentContactGroupLink,{targetKey: 'id', foreignKey: 'contact_id', as: 'merchent_contact_group_link'})
+
+MerchentContactGroupLink.belongsTo(MerchentContact,{targetKey: 'id', foreignKey: 'contact_id', as: 'merchent_contact'})
 
 module.exports = {
     SW_TBL_JSONRX_REGISTRATION,MerchentUserAuthTrack,MerchentProfile,

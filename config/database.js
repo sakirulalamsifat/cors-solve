@@ -33,11 +33,15 @@ const sequelize = new Sequelize(dbname, dbusername, dbpassword, {
 
 //Check connection establish or not......
 sequelize.authenticate()
+
     .then(function () {
+
         console.log("Database CONNECTED! ");
+
     })
     .catch(function (err) {
-        console.log(err)
+
+       // console.log(err)
         console.log("Unable to connect database !!");
     })
 

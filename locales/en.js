@@ -69,5 +69,6 @@
 	"accountpendingmessage" : "Your account is pending",
 	"cantnotapproved":"Approve not yet, you are the creator",
 	"alreadyapproved" :"Already approved !",
-	"alreadyhaverequest" : "Already have a request"
+	"alreadyhaverequest" : "Already have a request",
+	"contactsrequired" : "Please select contact"
 }
