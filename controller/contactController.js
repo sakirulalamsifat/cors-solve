@@ -68,7 +68,7 @@ router.post('/create_group', async (req, res) => {
     }
     catch (e) {
         console.log(e)
-        return res.status(200).send(OK(null, req.i18n.__('marketingpreferenceinfoupdatedsuccess'), req))
+        return res.status(200).send(OK(null, null, req))
         return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     }
 })
