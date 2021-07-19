@@ -135,6 +135,8 @@ router.post('/contact_group_link', async (req, res) => {
             }
         })
 
+        await MerchentContactGroupLink.destroy({where : {group_id,created_by:common_id}})
+
         MerchentContactGroupLink.bulkCreate(insertdata).then(async data => {
 
             return res.status(200).send(OK(null, null, req))
@@ -182,7 +184,6 @@ router.post('/contacts_by_group_id', (req, res) => {
     }
 })
 
-
 router.post('/delete_group', async (req, res)=>{
     
     try{
@@ -224,7 +225,7 @@ router.post('/delete_contatc', async(req, res)=>{
     try{
         let { contact_id } = req.body
 
-        await MerchentContactGroupLink.findOne({where:{contact_id}})
+        await MerchentContactGroupLink.destroy({where:{contact_id}})
 
         await MerchentContact.destroy({where: {id: contact_id}})
 
