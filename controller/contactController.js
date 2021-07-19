@@ -12,10 +12,19 @@ router.post('/create_contact', async (req, res) => {
         let { MSISDN, name } = req.body;
         let { common_id } = req.user_info
 
+        const info = await MerchentContact.findOne({where : {MSISDN,created_by: common_id}})
+
+        if(info) {
+
+            return res.status(400).send(BAD_REQUEST(req.i18n.__('contactexist'), null, req));
+
+        }
+
         MerchentContact.create({
             MSISDN,
             name,
             created_by: common_id
+
         }).then(data => {
 
             return res.status(200).send(OK(data, null, req))
@@ -61,6 +70,17 @@ router.post('/create_group', async (req, res) => {
     try {
         let { group_name } = req.body
         let { common_id } = req.user_info
+
+      const info =  await MerchentContactGroup.findOne({where : {
+            group_name,
+            created_by: common_id
+        }})
+
+        if(info) {
+
+            return res.status(400).send(BAD_REQUEST(req.i18n.__('groupexist'), null, req));
+
+        }
 
         MerchentContactGroup.create({
             group_name,
@@ -155,6 +175,7 @@ router.post('/contact_group_link', async (req, res) => {
 })
 
 router.post('/contacts_by_group_id', (req, res) => {
+   
     try {
         let { group_id } = req.body
 

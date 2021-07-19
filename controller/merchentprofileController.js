@@ -191,9 +191,10 @@ const FileUpload = async (req, res) => {
 router.post('/update', async (req, res) => {
 
   try {
-    let { ID_Image = null, License_Image = null, Logo_Image = null, ID_Front_Image = null, ID_Back_Image = null } = await FileUpload(req, res)
+    //let { ID_Image = null, License_Image = null, Logo_Image = null, ID_Front_Image = null, ID_Back_Image = null } = await FileUpload(req, res)
 
     let {
+      ID_Image = null, License_Image = null, Logo_Image = null, ID_Front_Image = null, ID_Back_Image = null,
       ID_Number = null,
       Id_Issued_Place =null,
       Merchant_Name =null ,

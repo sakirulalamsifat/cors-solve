@@ -70,5 +70,7 @@
 	"cantnotapproved":"Approve not yet, you are the creator",
 	"alreadyapproved" :"Already approved !",
 	"alreadyhaverequest" : "Already have a request",
-	"contactsrequired" : "Please select contact"
+	"contactsrequired" : "Please select contact",
+	"contactexist" : "Contact already exist",
+	"groupexist" : "Group already exist"
 }
