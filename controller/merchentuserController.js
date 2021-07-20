@@ -90,18 +90,30 @@ router.post('/create_user', async (req, res) => {
 router.post('/update_user', async (req, res) => {
 
     try {
-        let { mobile, fullname, password=null, email} = req.body
+        let { mobile, fullname, password=null, email, status = -1} = req.body
 
         let { common_id: MSISDN } = req.user_info
 
         const info = await MerchentUserAuthTrack.findOne({ where: { MSISDN: mobile } })
+
+        if (!info) {
+
+            return res.status(404).send(NOT_FOUND( null, req));
+
+        }
+
+        if(status == -1) {
+
+            status = info.status
+        }
 
         const hasspass = password?await hassPasswordGenerate(password) : info.password?info.password : null
 
         MerchentUserAuthTrack.update({
               fullname, 
               password: hasspass,
-              email
+              email,
+              status
              },{
                  where:{
                     MSISDN: mobile
