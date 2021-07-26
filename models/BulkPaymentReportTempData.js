@@ -52,6 +52,10 @@ const BulkPaymentReportTempData = sequelize.define('BulkPaymentReportTempData', 
     Created_Date:{
         type:DataTypes.DATE,
         defaultValue:sequelize.literal("getdate()")
+    },
+    GroupID : {
+        type:DataTypes.BIGINT,
+        defaultValue:0
     }
     
 }, {

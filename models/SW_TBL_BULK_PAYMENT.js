@@ -52,6 +52,10 @@ const SW_TBL_BULK_PAYMENT = sequelize.define('SW_TBL_BULK_PAYMENT', {
     Created_Date:{
         type:DataTypes.DATE,
         defaultValue:sequelize.literal("getdate()")
+    },
+    pin:{
+        type:DataTypes.STRING(500),
+        allowNull : true
     }
     
 }, {
