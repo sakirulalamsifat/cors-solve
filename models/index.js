@@ -21,6 +21,7 @@ import BulkPaymentReportTemp from './BulkPaymentReportTemp'
 import  MerchentContact from './MerchentContact'
 import  MerchentContactGroup from './MerchentContactGroup'
 import MerchentContactGroupLink from './MerchentContactGroupLink'
+import CreditUnionMembership from './CreditUnionMembership'
 
 
 MerchentContact.hasMany(MerchentContactGroupLink,{targetKey: 'id', foreignKey: 'contact_id', as: 'merchent_contact_group_link'})
@@ -28,6 +29,7 @@ MerchentContact.hasMany(MerchentContactGroupLink,{targetKey: 'id', foreignKey: '
 MerchentContactGroupLink.belongsTo(MerchentContact,{targetKey: 'id', foreignKey: 'contact_id', as: 'merchent_contact'})
 
 module.exports = {
+    CreditUnionMembership,
     SW_TBL_JSONRX_REGISTRATION,MerchentUserAuthTrack,MerchentProfile,
     BulkPayment,SmsRequestLog,MerchentReportTemp,BulkPaymentReportTempData,
     SW_TBL_PROFILE_MERCHANT_TEMP,MerchentProfileUpdateConfig,BulkPaymentReportTemp, 

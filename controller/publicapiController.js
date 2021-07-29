@@ -1,6 +1,6 @@
 import express from 'express'
 import  {OK, INTERNAL_SERVER_ERROR,BAD_REQUEST} from '../helpers/responseHelper'
-import {SW_TBL_ID_TYPE, MerchentBusinessType, MerchentNature} from '../models'
+import {SW_TBL_ID_TYPE, MerchentBusinessType, MerchentNature, CreditUnionMembership} from '../models'
 import {hassPasswordGenerate} from '../middleware'
 import 'dotenv/config'
 
@@ -43,5 +43,24 @@ router.get('/idtypes', (req, res)=>{
     }
    })
   
+   router.get('/creditunionmembership', (req, res)=>{
+    
+    try{
 
+      CreditUnionMembership.findAll().then(value=>{
+
+         return res.status(200).send(OK(value, null, req));
+
+       }).catch(e=>{
+
+        console.log('e ', e)
+        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+       })
+
+    }catch(e){
+
+     console.log('e ', e)
+     return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+    }
+   })
 module.exports = router;

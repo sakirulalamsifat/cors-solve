@@ -233,6 +233,7 @@ router.post('/set_password',checkModule,MobileValidator,async(req,res)=>{
 
 
     }catch(e){
+        console.log(e)
         return  res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     }
 })
@@ -246,7 +247,7 @@ router.post('/login',checkModule,MobileValidator,async(req,res)=>{
 
         const info = await MerchentUserAuthTrack.findOne({where:{MSISDN:mobile}})
 
-        if(info){
+        if(info && info.password){
 
             const is_match = await verifyPassword(password,info.password)
 
