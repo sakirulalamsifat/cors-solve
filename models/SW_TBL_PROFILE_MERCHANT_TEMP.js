@@ -1,7 +1,7 @@
 
 
-import DataTypes, { BIGINT, TEXT } from 'sequelize'
-import sequelize from '../config/database'
+import DataTypes from 'sequelize';
+import sequelize from '../config/database';
 
 const SW_TBL_PROFILE_MERCHANT_TEMP = sequelize.define('SW_TBL_PROFILE_MERCHANT_TEMP', {
     RowId:{
@@ -273,6 +273,49 @@ const SW_TBL_PROFILE_MERCHANT_TEMP = sequelize.define('SW_TBL_PROFILE_MERCHANT_T
     Exchange_Rate_Id:{
         type: DataTypes.INTEGER
     },
+    // new add
+    Website:{
+        type: DataTypes.TEXT
+    },
+    Facebook:{
+        type: DataTypes.TEXT
+    },
+    Instagram:{
+        type: DataTypes.TEXT
+    },
+    Twitter:{
+        type: DataTypes.TEXT
+    },
+    BriefDescription:{
+        type: DataTypes.TEXT
+    },
+    TelephoneNo:{
+        type: DataTypes.TEXT
+    },
+    MerchantRegistrationReference:{
+        type:DataTypes.TEXT
+    },
+    AuthorizedMerchantsFullName:{
+        type:DataTypes.TEXT
+    },
+    ProjectedValueofTransactions:{
+        type:DataTypes.TEXT
+    },
+    PrimaryContactName:{
+        type:DataTypes.TEXT
+    },
+    Principals:{
+        type:DataTypes.TEXT
+    },
+    BusinessOwnershipStructure:{
+        type: DataTypes.TEXT
+    },
+    CreditUnionMembership:{
+        type:DataTypes.TEXT
+    },
+    CreditUnionDepositAccount:{
+        type:DataTypes.TEXT
+    }
 }, {
     tableName: 'SW_TBL_PROFILE_MERCHANT_TEMP',
     freezeTableName: true,

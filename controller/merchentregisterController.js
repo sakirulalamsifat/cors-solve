@@ -1,10 +1,9 @@
 import express from 'express'
-import { OK, INTERNAL_SERVER_ERROR, BAD_REQUEST } from '../helpers/responseHelper'
-import { MerchentUserAuthTrack, MerchentProfile, SW_TBL_PROFILE_MERCHANT_TEMP, MerchentProfileUpdateConfig } from '../models'
-import { hassPasswordGenerate } from '../middleware'
+import path from "path"
 import sequelize from '../config/database'
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR, OK } from '../helpers/responseHelper'
+import { SW_TBL_PROFILE_MERCHANT_TEMP } from '../models'
 
-import path from "path";
 
 require('dotenv').config()
 
@@ -357,6 +356,23 @@ router.post('/v2/register', async (req, res) => {
             ID_Front_image = null,
             ID_Back_Image = null,
             //image need to upload
+
+            // new
+            Account_Contact_Name = null,
+            Website = null,
+            Facebook = null,
+            Instagram=null,
+            Twitter = null,
+            BriefDescription=null,
+            TelephoneNo=null,
+            MerchantRegistrationReference = null,
+            AuthorizedMerchantsFullName = null,
+            ProjectedValueofTransactions = null,
+            Principals = null,
+            BusinessOwnershipStructure = null,
+            CreditUnionMembership = null,
+            CreditUnionDepositAccount = null,
+            //new
             License_No = null,
             Business_Type,
             Email,
@@ -411,6 +427,7 @@ router.post('/v2/register', async (req, res) => {
             MSISDN,
             Merchant_Name,
             Merchant_Nature,
+            PrimaryContactName : Account_Contact_Name,
             ID_Type,
             ID_Number,
             Id_Issued_Place,
@@ -421,6 +438,23 @@ router.post('/v2/register', async (req, res) => {
             License_No,
             License_image,
             //need to add in database
+
+            // new
+            Website,
+            Facebook,
+            Instagram,
+            Twitter,
+            BriefDescription,
+            TelephoneNo,
+            MerchantRegistrationReference,
+            AuthorizedMerchantsFullName,
+            ProjectedValueofTransactions,
+            Principals,
+            BusinessOwnershipStructure,
+            CreditUnionMembership,
+            CreditUnionDepositAccount,
+
+            //new
             // Business_Type,
             Email,
             Bank_Code,
