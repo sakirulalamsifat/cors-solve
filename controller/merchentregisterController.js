@@ -358,7 +358,7 @@ router.post('/v2/register', async (req, res) => {
             //image need to upload
 
             // new
-            Account_Contact_Name = null,
+            PrimaryContactName = null,
             Website = null,
             Facebook = null,
             Instagram=null,
@@ -427,7 +427,7 @@ router.post('/v2/register', async (req, res) => {
             MSISDN,
             Merchant_Name,
             Merchant_Nature,
-            PrimaryContactName : Account_Contact_Name,
+            Account_Contact_Name : PrimaryContactName ,
             ID_Type,
             ID_Number,
             Id_Issued_Place,

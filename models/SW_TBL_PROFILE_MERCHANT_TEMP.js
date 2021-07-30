@@ -301,9 +301,6 @@ const SW_TBL_PROFILE_MERCHANT_TEMP = sequelize.define('SW_TBL_PROFILE_MERCHANT_T
     ProjectedValueofTransactions:{
         type:DataTypes.TEXT
     },
-    PrimaryContactName:{
-        type:DataTypes.TEXT
-    },
     Principals:{
         type:DataTypes.TEXT
     },
