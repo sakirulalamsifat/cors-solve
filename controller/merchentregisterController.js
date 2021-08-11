@@ -260,7 +260,7 @@ router.post('/register', async (req, res) => {
             Is_Web_Login = 1,
             Enable_Sms_Notification = 1,
             Fail_Attempt = 0,
-            Temp_Status = 0
+            Temp_Status = 1
 
         SW_TBL_PROFILE_MERCHANT_TEMP.create({
             MSISDN,
@@ -388,7 +388,8 @@ router.post('/v2/register', async (req, res) => {
             Street_House_No,
             Branch_Code,
             CommonBusinessName,
-            City
+            City,
+            Username = null
         } = req.body
 
         console.log(req.body.Id_Issued_Date)
@@ -408,7 +409,7 @@ router.post('/v2/register', async (req, res) => {
             IsCashOut = 0,
             Last_Sweep_Date = addingdaysformattedinsql,
             Holding_Ammount = 0,
-            Created_By = 'business1',
+            Created_By = Username || 'business1',
             Created_Date = currentDate,
             Modified_By = 'business2',
             Reward = 1,
@@ -421,7 +422,7 @@ router.post('/v2/register', async (req, res) => {
             Is_Web_Login = 1,
             Enable_Sms_Notification = 1,
             Fail_Attempt = 0,
-            Temp_Status = 0
+            Temp_Status = 1
 
         SW_TBL_PROFILE_MERCHANT_TEMP.create({
             MSISDN,
