@@ -653,7 +653,7 @@ router.post('/customertransectionreport', (req, res)=>{
 
       let {Msisdn,FromDate,ToDate,Page,PageSize } = req.body 
 
-      Page = +Page;  
+      Page = +Page;   
       PageSize = +PageSize;  
 
       const offset = PageSize * (Page - 1)
@@ -670,7 +670,15 @@ router.post('/customertransectionreport', (req, res)=>{
      
       .then(report => {
 
-       return res.status(200).send(OK( report[0], null, req));
+        const reportHistory = report[0].map(item => {
+             if(item.Keyword == 'SEND' && item.Dest_Wallet_ID == Msisdn){
+                 return {...item, Keyword : "RECV", Keyword_Description: 'Receive'}
+             }
+             else {
+                 return item
+             }
+        })
+       return res.status(200).send(OK( reportHistory, null, req));
 
       }).catch(e=>{
 
