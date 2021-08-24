@@ -207,27 +207,29 @@ router.post('/register', async (req, res) => {
             Id_Issued_Place = null,
             ID_Issue_Date = null,
             ID_Expiry_Date = null,
-            // ID_image,
+             ID_image,
             License_No = null,
-            // License_image,
+             License_image,
             Business_Type,
             Email,
             Bank_Code,
             Bank_Account_No,
             Sweep_Interval,
             District,
-            // Logo_Image,
+             Logo_Image,
             Bank_Address,
             Bank_Swift_Code,
-            // ID_Front_image,
-            // ID_Back_Image,
+             ID_Front_image,
+             ID_Back_Image,
             Latitude,
             Longitude,
             Communice,
             Street_House_No,
             Branch_Code,
             CommonBusinessName,
-            City
+            City,
+
+
         } = req.body
 
         console.log(req.body.Id_Issued_Date)
@@ -389,10 +391,43 @@ router.post('/v2/register', async (req, res) => {
             Branch_Code,
             CommonBusinessName,
             City,
-            Username = null
+            Username = null,
+
+            Merchant_Type = 'Normal',
+            ServiceUrl = null, 
+          //  IsBank = false,
+            Opening : Open_Time = null,
+            Closing : Close_Time = null,
+            MerchantGroup = null,
+            IsWebLogin = 0,
+            AccountNumber : Merchant_As_Bank_Account_No = null,
+            HoldingAmount : Holding_Amount = null,
+            IsCashout = 0,
+            BankBranchCode : Bank_Branch_Code = null,
+            MerchantCategory = null,
+            MerchantSubcategory = null,
+            Reward = 1,
+            Charge = 1,
+            Commission = 1,
+            BusinessContactName : Business_Contact_Name = null,
+            BusinessContactEmail : Business_Contact_Email = null,
+            BusinessContactMobile : Business_Contact_Mobile= null,
+            BusinessContactPhone : Business_Contact_Phone = null,
+            TechnicalContactName : Technical_Contact_Name = null,
+            TechnicalContactEmail : Technical_Contact_Email = null,
+            TechnicalContactMobile : Technical_Contact_Mobile = null,
+            TechnicalContactPhone : Technical_Contact_Phone = null,
+            AccountContactName : Account_Contact_Name = null,
+            AccountContactEmail : Account_Contact_Email = null,
+            AccountContactMobile : Account_Contact_Mobile = null,
+            AccountContactPhone : Account_Contact_Phone = null
+
         } = req.body
 
-        console.log(req.body.Id_Issued_Date)
+        IsWebLogin = IsWebLogin ? 1 : 0
+        IsCashout = IsCashout ? 1 : 0
+
+        //console.log(req.body.Id_Issued_Date)
 
         const currentDate = sequelize.literal("getdate()")
 
@@ -403,23 +438,21 @@ router.post('/v2/register', async (req, res) => {
         let Acc_Code = 'M' + Math.floor((Math.random() * 1000000) + 1).toString(),
             Status = 0,
             Wallet_Type = 107,
-            Keyword_Commission_ID = 1,
-            Keyword_Charge_Id = 1,
-            Merchant_Type = 'Normal',
-            IsCashOut = 0,
+            Keyword_Commission_ID = Commission,
+            Keyword_Charge_Id = Charge,
             Last_Sweep_Date = addingdaysformattedinsql,
             Holding_Ammount = 0,
             Created_By = Username || 'business1',
             Created_Date = currentDate,
             Modified_By = 'business2',
-            Reward = 1,
             Vat_Setting = '0',
             Is_Single_Number = 0,
             Is_visible_On_App = 0,
             Operation = 'Insert',
             Is_Agent_Payment = 0,
-            Menu_Code = null,
-            Is_Web_Login = 1,
+            //Menu_Code = null,
+            Menu_Code = MerchantSubcategory || MerchantCategory,
+            Is_Web_Login = IsWebLogin,
             Enable_Sms_Notification = 1,
             Fail_Attempt = 0,
             Temp_Status = 1
@@ -499,16 +532,41 @@ router.post('/v2/register', async (req, res) => {
             Is_Web_Login,
             Enable_Sms_Notification,
             Fail_Attempt,
-            Temp_Status
+            Temp_Status,
+
+            ServiceUrl,
+            Merchant_As_Bank_Account_No,
+            Open_Time,
+            Close_Time,
+            Holding_Amount,
+            Bank_Branch_Code,
+            Business_Contact_Name ,
+             Business_Contact_Email ,
+             Business_Contact_Mobile,
+            Business_Contact_Phone,
+            Technical_Contact_Name ,
+            Technical_Contact_Email ,
+            Technical_Contact_Mobile ,
+             Technical_Contact_Phone ,
+             Account_Contact_Name ,
+             Account_Contact_Email ,
+             Account_Contact_Mobile ,
+             Account_Contact_Phone 
+
+
+
         }).then(value => {
-            console.log(value)
+           // console.log(value)
             return res.status(200).send(OK(value, null, req));
+
         }).catch(error => {
+
             console.log(error)
             return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
         })
 
     } catch (e) {
+
         console.log(e)
         return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     }
