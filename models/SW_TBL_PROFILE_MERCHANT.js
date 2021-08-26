@@ -27,6 +27,9 @@ const SW_TBL_PROFILE_MERCHANT = sequelize.define('SW_TBL_PROFILE_MERCHANT', {
         type: DataTypes.TEXT,
         allowNull: true
     },
+    Business_Type:{
+        type:DataTypes.TEXT
+     },
     Merchant_Nature:{
         type: DataTypes.TEXT,
         allowNull: false

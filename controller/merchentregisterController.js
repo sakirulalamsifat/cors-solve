@@ -376,7 +376,7 @@ router.post('/v2/register', async (req, res) => {
             CreditUnionDepositAccount = null,
             //new
             License_No = null,
-            Business_Type,
+            Business_Type = null,
             Email,
             Bank_Code,
             Bank_Account_No,
@@ -461,7 +461,7 @@ router.post('/v2/register', async (req, res) => {
             MSISDN,
             Merchant_Name,
             Merchant_Nature,
-            Account_Contact_Name : PrimaryContactName ,
+            Account_Contact_Name : PrimaryContactName,
             ID_Type,
             ID_Number,
             Id_Issued_Place,
@@ -489,7 +489,7 @@ router.post('/v2/register', async (req, res) => {
             CreditUnionDepositAccount,
 
             //new
-            // Business_Type,
+            Business_Type,
             Email,
             Bank_Code,
             Bank_Account_No,

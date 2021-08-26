@@ -42,9 +42,9 @@ const SW_TBL_PROFILE_MERCHANT_TEMP = sequelize.define('SW_TBL_PROFILE_MERCHANT_T
     ID_Issue_Date:{
         type: DataTypes.TEXT,
     },
-    // Business_Type:{
-    //     type:DataTypes.TEXT
-    // },
+      Business_Type:{
+        type:DataTypes.TEXT
+     },
     // Holding_Ammount:{
     //     type:DataTypes.DOUBLE
     // },
