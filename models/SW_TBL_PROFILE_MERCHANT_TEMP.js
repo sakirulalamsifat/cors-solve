@@ -98,6 +98,9 @@ const SW_TBL_PROFILE_MERCHANT_TEMP = sequelize.define('SW_TBL_PROFILE_MERCHANT_T
     },
 
     //new Added
+    MerchantGroup : {
+        type: DataTypes.BIGINT
+    },
     Bank_Account_No:{
         type: DataTypes.TEXT
     },

@@ -80,7 +80,7 @@ app.use("/api/merchent/", MerchentRegisterController)
 //only use supplier cirtificate upload, it's a fack api..
 app.post('/api/fackupload',(req,res)=>{return res.status(200).send(); })
 
- //app.use(checkAuthorizaion);
+ app.use(checkAuthorizaion);
 
 //dynamic routing so no need to include routes explicitly
  readdir('./routes', (err, files) => {

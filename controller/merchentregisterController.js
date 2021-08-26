@@ -514,7 +514,7 @@ router.post('/v2/register', async (req, res) => {
             Keyword_Commission_ID,
             Keyword_Charge_Id,
             Merchant_Type,
-            IsCashOut,
+            IsCashOut : IsCashout,
             Last_Sweep_Date,
             //need to add on database
             // Holding_Ammount,
@@ -551,7 +551,8 @@ router.post('/v2/register', async (req, res) => {
              Account_Contact_Name ,
              Account_Contact_Email ,
              Account_Contact_Mobile ,
-             Account_Contact_Phone 
+             Account_Contact_Phone,
+             MerchantGroup 
 
 
 

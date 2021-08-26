@@ -17,6 +17,9 @@ const SW_TBL_PROFILE_MERCHANT = sequelize.define('SW_TBL_PROFILE_MERCHANT', {
         type: DataTypes.TEXT,
         allowNull: true
     },
+    MerchantGroup : {
+        type: DataTypes.BIGINT
+    },
     Status:{
         type: DataTypes.TINYINT
     },
