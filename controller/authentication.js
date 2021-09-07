@@ -5,7 +5,7 @@ import {CustomerOtherInformationValidator,MobileValidator} from '../middleware/v
 import  {OK, INTERNAL_SERVER_ERROR,BAD_REQUEST} from '../helpers/responseHelper'
 import {MerchentUserAuthTrack,MerchentProfile,SmsRequestLog, SW_TBL_JSONRX_REGISTRATION} from '../models'
 import {genRandomInRange,currenttimestamp,SecondDifferenceBetweenToDate} from '../helpers/utilities'
-import {Mail} from '../helpers/mail'
+import {getImageFullPath} from '../helpers/imagesystem'
 import 'dotenv/config'
 import axios from 'axios'
 
@@ -20,48 +20,18 @@ const sms_api_userid = process.env.sms_api_userid
 const sms_api_handle = process.env.sms_api_handle
 const sms_api_from = process.env.sms_api_from
 
-const getImageFullPath = async(Logo_Image=null)=>{
-
-    if(Logo_Image){
-
-        let logo = Logo_Image
-        //Logo_Image=9841245601_Merchant_Logo_Image202012220712295797_2020-12-22.png
-        const  split_array = Logo_Image.split('_')
-        //split_array = ['9841245601','Merchant','Logo','Image202012220712295797','2020-12-22.png']
-        const get_folder_composit_name = split_array[split_array.length-1].split('.')
-        //get_folder_composit_name= ['2020-12-22','png']
-        const folder_names = get_folder_composit_name[0].split('-')
-        //folder_names = ['2020','12','22',.....]
-        Logo_Image = process.env.host
-        folder_names.forEach((item,index)=>Logo_Image= `${Logo_Image}/${folder_names[index]}`)
-
-        return `${Logo_Image}/${logo}`
-
-    }
-    else{
-
-        return null
-    }
-
-}
+const mlajan_notification_api_base_url = process.env.mlajan_notification_api_base_url
 
 const SmsApi = (Destination_MSISDN,body)=>{
 
     //fetch sms api....
-    axios.get(`${sms_api_url}?username=${sms_api_username}&userid=${sms_api_userid}&handle=${sms_api_handle}&from=${sms_api_from}&msg=${body}&to=${+Destination_MSISDN}`)
-    .then(response=>{
-        console.log(response.data)
-        let data = response.data
-        SmsRequestLog.create({
-            MSISDN:Destination_MSISDN.toString(),
-            ResponseBody:data
-        })
-        
+    axios.post(`${mlajan_notification_api_base_url}/api/smsRouter`,{
+        "Msisdn": Destination_MSISDN,
+        "Message":body,
+        "Keyword": 'AOTP',
+        "SendSms":'Y'
     })
-    .catch(error=>{
-        console.log("sms sending error")
-        
-    }) 
+ 
 }
 
 router.post('/check_mobile',checkModule,MobileValidator,async(req,res)=>{
@@ -85,14 +55,9 @@ router.post('/check_mobile',checkModule,MobileValidator,async(req,res)=>{
                 }
                 else if(authtrack){
 
-                    await MerchentUserAuthTrack.update({fullname:data.Merchant_Name,otp:OTP,otp_created_at:currenttimestamp()},{where:{MSISDN:mobile}})
+                    await MerchentUserAuthTrack.update({fullname:data.Merchant_Name,otp:OTP,otp_created_at:currenttimestamp()},{where:{MSISDN:mobile}})                  
 
-                    if(data.Email){
-
-                        Mail({to:data.Email,subject:notification_title,text:`OTP is ${OTP}`})
-                        SmsApi(mobile,`OTP is ${OTP}`)
-
-                    }
+                        SmsApi(mobile,`${OTP} OTP is user verification code`)
 
                     return res.status(200).send(OK( {is_firsttime:true}, null, req));
 
@@ -101,13 +66,11 @@ router.post('/check_mobile',checkModule,MobileValidator,async(req,res)=>{
                 else{
 
                     await MerchentUserAuthTrack.create({MSISDN:data.MSISDN,fullname:data.Merchant_Name,otp:OTP,otp_created_at:currenttimestamp()})
+                    
 
-                    if(data.Email){
+                        SmsApi(mobile,`${OTP} OTP is user verification code`)
 
-                        Mail({to:data.Email,subject:notification_title,text:`OTP is ${OTP}`})
-                        SmsApi(mobile,`OTP is ${OTP}`)
-
-                    }
+                    
                     return res.status(200).send(OK( {is_firsttime:true}, null, req));
 
                 }

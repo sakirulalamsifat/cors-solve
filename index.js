@@ -92,14 +92,14 @@ app.post('/api/fackupload',(req,res)=>{return res.status(200).send(); })
 
  });
 
- https.createServer(options,app).listen(PORT,()=>console.log(`app run on port ${PORT}`));
+ //https.createServer(options,app).listen(PORT,()=>console.log(`app run on port ${PORT}`));
  
- /*
+ 
 app.listen(PORT, () => {
 
     info(`🚀 Magic happens at port number ${PORT}`);
 
-});*/
+});
 
 
 
