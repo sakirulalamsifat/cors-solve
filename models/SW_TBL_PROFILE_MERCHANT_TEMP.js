@@ -4,7 +4,7 @@ import DataTypes from 'sequelize';
 import sequelize from '../config/database';
 
 const SW_TBL_PROFILE_MERCHANT_TEMP = sequelize.define('SW_TBL_PROFILE_MERCHANT_TEMP', {
-    RowId:{
+    Row_Id:{
         type: DataTypes.BIGINT,
         primaryKey: true,
         allowNull: false,

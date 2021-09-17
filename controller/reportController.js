@@ -493,8 +493,12 @@ router.post('/groupdatareject',async(req,res)=>{
 router.post('/merchenttransectionreport', (req, res)=>{
 
     try{
-      let {startdate,enddate } = req.body
+        
+      let {startdate,enddate, merchent_MSISDN = null  } = req.body
+
       let {common_id:MSISDN} = req.user_info
+
+      MSISDN = merchent_MSISDN ? merchent_MSISDN : MSISDN
   
 
       const query = `select * from SW_VW_MERCHANT_REPORT where Dest_Wallet_Id=${MSISDN} and Created_Date >= '${startdate} 00:00:00' and Created_Date <= '${enddate} 23:59:59' `
@@ -524,10 +528,18 @@ router.post('/totalmerchenttransectionreportcount', (req, res)=>{
 
     try{
 
-     let {common_id:MSISDN} = req.user_info
+     let {common_id:MSISDN = null} = req.user_info
 
-      const query = `select count(*) as total_transection, sum(Amount) as total_sell from SW_VW_MERCHANT_REPORT where Dest_Wallet_Id=${MSISDN} `
-       const query2 = `select sum(Amount) as refund_setll from SW_VW_MERCHANT_REPORT where Dest_Wallet_Id = ${MSISDN} and Status = 8`
+      let query = `select count(*) as total_transection, sum(Amount) as total_sell, sum(Transaction_Fee) as total_revenue from SW_VW_MERCHANT_REPORT `
+      let query2 = `select sum(Amount) as refund_setll from SW_VW_MERCHANT_REPORT where Status = 8`
+      
+      if(MSISDN) {
+
+         query = `select count(*) as total_transection, sum(Amount) as total_sell, sum(Transaction_Fee) as total_revenue from SW_VW_MERCHANT_REPORT where Dest_Wallet_Id=${MSISDN} `
+         query2 = `select sum(Amount) as refund_setll from SW_VW_MERCHANT_REPORT where Dest_Wallet_Id = ${MSISDN} and Status = 8`
+        
+      }
+      
       console.log(query)
       console.log(query2)
      
@@ -537,8 +549,8 @@ router.post('/totalmerchenttransectionreportcount', (req, res)=>{
 
         const result2 = await  sequelize.query(query2)
         const {refund_setll = 0} = result2[0][0]
-        const {total_sell = 0, total_transection = 0} = report[0][0]
-        const data = [{total_transection,total_sell : ((+total_sell) - (+refund_setll))}]
+        const {total_sell = 0, total_transection = 0,total_revenue = 0} = report[0][0]
+        const data = [{total_transection,total_sell : ((+total_sell) - (+refund_setll)),total_revenue}]
 
        return res.status(200).send(OK( data, null, req));
 
@@ -673,6 +685,9 @@ router.post('/customertransectionreport', (req, res)=>{
         const reportHistory = report[0].map(item => {
              if(item.Keyword == 'SEND' && item.Dest_Wallet_ID == Msisdn){
                  return {...item, Keyword : "RECV", Keyword_Description: 'Receive'}
+             }
+             else if(item.Keyword == 'PMNT') {
+                 return {...item, Amount : (item.Amount + item.Transaction_Fee)}
              }
              else {
                  return item

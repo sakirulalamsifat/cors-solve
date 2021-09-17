@@ -14,7 +14,7 @@ const SW_TBL_WALLET = sequelize.define('SW_TBL_WALLET', {
         allowNull: false
     },
     Amount: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DOUBLE,
     },
     Created_By:{
         type: DataTypes.TEXT,

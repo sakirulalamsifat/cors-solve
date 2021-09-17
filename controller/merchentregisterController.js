@@ -2,7 +2,7 @@ import express from 'express'
 import path from "path"
 import sequelize from '../config/database'
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR, OK } from '../helpers/responseHelper'
-import { SW_TBL_PROFILE_MERCHANT_TEMP } from '../models'
+import { SW_TBL_PROFILE_MERCHANT_TEMP, MerchentProfile } from '../models'
 
 
 require('dotenv').config()
@@ -187,11 +187,6 @@ const FileUpload = async (req, res) => {
     })
 }
 
-// router.get('/aluser', (req, res)=>{
-//   MerchentProfile.findAll({ where: { } }).then(user=>{
-//     res.json(user)
-//   })
-// })
 
 router.post('/register', async (req, res) => {
 
@@ -339,8 +334,8 @@ router.post('/register', async (req, res) => {
 router.post('/v2/register', async (req, res) => {
 
     try {
-        //console.log("Hello world")
-        // let { ID_Image = null, License_Image = null, Logo_Image = null, ID_Front_Image = null, ID_Back_Image = null } = await FileUpload(req, res)
+       
+        console.log(' Request ', req.body)
 
         let {
             MSISDN,
@@ -353,7 +348,7 @@ router.post('/v2/register', async (req, res) => {
             ID_Expiry_Date = null,
             //image need to upload
             ID_image = null,
-            License_image = null,
+            License_image : License_Image = null,
             Logo_Image = null,
             ID_Front_image = null,
             ID_Back_Image = null,
@@ -379,7 +374,7 @@ router.post('/v2/register', async (req, res) => {
             Business_Type = null,
             Email,
             Bank_Code,
-            Bank_Account_No,
+            Bank_Account_No : Merchant_As_Bank_Account_No = null,
             Sweep_Interval,
             District,
             Bank_Address,
@@ -400,7 +395,7 @@ router.post('/v2/register', async (req, res) => {
             Closing : Close_Time = null,
             MerchantGroup = null,
             IsWebLogin = 0,
-            AccountNumber : Merchant_As_Bank_Account_No = null,
+            AccountNumber : Bank_Account_No ,
             HoldingAmount : Holding_Amount = null,
             IsCashout = 0,
             BankBranchCode : Bank_Branch_Code = null,
@@ -457,6 +452,21 @@ router.post('/v2/register', async (req, res) => {
             Fail_Attempt = 0,
             Temp_Status = 1
 
+    
+        const existmerchentinmaintable = await MerchentProfile.findOne( { where : { MSISDN }})
+
+        if(existmerchentinmaintable) {
+
+            return res.status(400).send(BAD_REQUEST('Merchent already registered', null, req))
+        }
+
+        const existmerchentintemptable = await SW_TBL_PROFILE_MERCHANT_TEMP.findOne( { where : { MSISDN }})
+
+        if(existmerchentintemptable) {
+
+            return res.status(400).send(BAD_REQUEST('Merchent already in pending list', null, req))
+        }
+
         SW_TBL_PROFILE_MERCHANT_TEMP.create({
             MSISDN,
             Merchant_Name,
@@ -470,7 +480,7 @@ router.post('/v2/register', async (req, res) => {
             ID_Expiry_Date,
             ID_image,
             License_No,
-            License_image,
+            License_Image,
             //need to add in database
 
             // new
