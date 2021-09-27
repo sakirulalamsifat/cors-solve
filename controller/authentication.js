@@ -50,6 +50,10 @@ router.post('/check_mobile',checkModule,MobileValidator,async(req,res)=>{
 
                 if(authtrack && authtrack.password != null){
 
+                    await MerchentUserAuthTrack.update({fullname:data.Merchant_Name,otp:OTP,otp_created_at:currenttimestamp()},{where:{MSISDN:mobile}})                  
+
+                    SmsApi(mobile,`${OTP} OTP is user verification code`)
+
                     return res.status(200).send(OK( {is_firsttime:false}, null, req));
 
                 }
