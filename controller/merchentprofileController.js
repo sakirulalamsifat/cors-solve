@@ -1,6 +1,6 @@
 import express from 'express'
 import { OK, INTERNAL_SERVER_ERROR, BAD_REQUEST } from '../helpers/responseHelper'
-import { MerchentUserAuthTrack, MerchentProfile, SW_TBL_PROFILE_MERCHANT_TEMP, MerchentProfileUpdateConfig, SW_TBL_WALLET, SW_VW_MERCHANT_REPORT} from '../models'
+import { MerchentUserAuthTrack, MerchentProfile, SW_TBL_PROFILE_MERCHANT_TEMP, MerchentProfileUpdateConfig, SW_TBL_WALLET, SW_VW_MERCHANT_REPORT } from '../models'
 import { hassPasswordGenerate } from '../middleware'
 import sequelize from '../config/database'
 const { Op } = require("sequelize");
@@ -196,20 +196,20 @@ router.post('/update', async (req, res) => {
     let {
       ID_Image = null, License_Image = null, Logo_Image = null, ID_Front_Image = null, ID_Back_Image = null,
       ID_Number = null,
-      Id_Issued_Place =null,
-      Merchant_Name =null ,
+      Id_Issued_Place = null,
+      Merchant_Name = null,
       Merchant_Nature = null,
       Wallet_Type = null,
-      
-      License_No =null,
-      Website =null,
+
+      License_No = null,
+      Website = null,
       Report_Email = null,
       Email = null,
       Bank_Code = null,
       Bank_Account_No = null,
-      District =null,
+      District = null,
       City = null,
-      Business_Contact_Name =null,
+      Business_Contact_Name = null,
       Business_Contact_Mobile = null,
       Business_Contact_Phone = null,
       Business_Contact_Email = null,
@@ -221,7 +221,7 @@ router.post('/update', async (req, res) => {
       Account_Contact_Mobile = null,
       Account_Contact_Phone = null,
       Account_Contact_Email = null,
-      Bank_Address=null,
+      Bank_Address = null,
       Bank_Swift_Code = null,
       Bank_Branch_Code = null,
       Latitude = null,
@@ -230,56 +230,56 @@ router.post('/update', async (req, res) => {
       Street_House_No = null
     } = req.body
 
-    let ID_Issue_Date = new  Date(), ID_Expiry_Date = new Date();
+    let ID_Issue_Date = new Date(), ID_Expiry_Date = new Date();
 
     let { MSISDN, is_merchent } = req.user_info
 
     const Temp_Status = 0, Status = 0
 
     MerchentProfile.findOne({ where: { MSISDN } }).then(async data => {
-  
-      let { 
-          ID_Image:ID_Image1,
-          License_Image:License_Image1,
-          Logo_Image:Logo_Image1, 
-          ID_Front_Image:ID_Front_Image1,
-          ID_Back_Image: ID_Back_Image1,
 
-          ID_Number:ID_Number1 = null,
-          Id_Issued_Place:Id_Issued_Place1 =null,
-          Merchant_Name:Merchant_Name1 =null ,
-          Merchant_Nature :Merchant_Nature1= null,
-          Wallet_Type:Wallet_Type1 = null,
-          License_No :License_No1=null,
-          Website :Website1=null,
-          Report_Email :Report_Email1= null,
-          Email:Email1 = null,
-          Bank_Code:Bank_Code1 = null,
-          Bank_Account_No: Bank_Account_No1= null,
-          District :District1=null,
-          City:City1 = null,
-          Business_Contact_Name:Business_Contact_Name1 =null,
-          Business_Contact_Mobile :Business_Contact_Mobile1= null,
-          Business_Contact_Phone:Business_Contact_Phone1 = null,
-          Business_Contact_Email:Business_Contact_Email1 = null,
-          Technical_Contact_Name:Technical_Contact_Name1 = null,
-          Technical_Contact_Mobile:Technical_Contact_Mobile1 = null,
-          Technical_Contact_Phone:Technical_Contact_Phone1 = null,
-          Technical_Contact_Email:Technical_Contact_Email1 = null,
-          Account_Contact_Name:Account_Contact_Name1 = null,
-          Account_Contact_Mobile:Account_Contact_Mobile1 = null,
-          Account_Contact_Phone :Account_Contact_Phone1= null,
-          Account_Contact_Email :Account_Contact_Email1= null,
-          Communice:Communice1 = null,
-          Street_House_No:Street_House_No1 = null,
+      let {
+        ID_Image: ID_Image1,
+        License_Image: License_Image1,
+        Logo_Image: Logo_Image1,
+        ID_Front_Image: ID_Front_Image1,
+        ID_Back_Image: ID_Back_Image1,
 
-          Bank_Address:Bank_Address1=null, 
-          Bank_Swift_Code:Bank_Swift_Code1 = null, 
-          Bank_Branch_Code :Bank_Branch_Code1= null,
-          Latitude :Latitude1= null,
-          Longitude:Longitude1 = null
+        ID_Number: ID_Number1 = null,
+        Id_Issued_Place: Id_Issued_Place1 = null,
+        Merchant_Name: Merchant_Name1 = null,
+        Merchant_Nature: Merchant_Nature1 = null,
+        Wallet_Type: Wallet_Type1 = null,
+        License_No: License_No1 = null,
+        Website: Website1 = null,
+        Report_Email: Report_Email1 = null,
+        Email: Email1 = null,
+        Bank_Code: Bank_Code1 = null,
+        Bank_Account_No: Bank_Account_No1 = null,
+        District: District1 = null,
+        City: City1 = null,
+        Business_Contact_Name: Business_Contact_Name1 = null,
+        Business_Contact_Mobile: Business_Contact_Mobile1 = null,
+        Business_Contact_Phone: Business_Contact_Phone1 = null,
+        Business_Contact_Email: Business_Contact_Email1 = null,
+        Technical_Contact_Name: Technical_Contact_Name1 = null,
+        Technical_Contact_Mobile: Technical_Contact_Mobile1 = null,
+        Technical_Contact_Phone: Technical_Contact_Phone1 = null,
+        Technical_Contact_Email: Technical_Contact_Email1 = null,
+        Account_Contact_Name: Account_Contact_Name1 = null,
+        Account_Contact_Mobile: Account_Contact_Mobile1 = null,
+        Account_Contact_Phone: Account_Contact_Phone1 = null,
+        Account_Contact_Email: Account_Contact_Email1 = null,
+        Communice: Communice1 = null,
+        Street_House_No: Street_House_No1 = null,
 
-        } = data
+        Bank_Address: Bank_Address1 = null,
+        Bank_Swift_Code: Bank_Swift_Code1 = null,
+        Bank_Branch_Code: Bank_Branch_Code1 = null,
+        Latitude: Latitude1 = null,
+        Longitude: Longitude1 = null
+
+      } = data
 
       ID_Image = ID_Image ? ID_Image : ID_Image1
       License_Image = License_Image ? License_Image : License_Image1
@@ -291,45 +291,45 @@ router.post('/update', async (req, res) => {
 
       const Created_By = configinfo ? configinfo.createdbyname : 'bussiness1'
 
-      ID_Image = ID_Image?ID_Image:ID_Image1
-      License_Image = License_Image?License_Image:License_Image1
-      Logo_Image = Logo_Image?Logo_Image:Logo_Image1
-      ID_Front_Image = ID_Front_Image?ID_Front_Image:ID_Front_Image1
-      ID_Back_Image = ID_Back_Image?ID_Back_Image: ID_Back_Image1
+      ID_Image = ID_Image ? ID_Image : ID_Image1
+      License_Image = License_Image ? License_Image : License_Image1
+      Logo_Image = Logo_Image ? Logo_Image : Logo_Image1
+      ID_Front_Image = ID_Front_Image ? ID_Front_Image : ID_Front_Image1
+      ID_Back_Image = ID_Back_Image ? ID_Back_Image : ID_Back_Image1
 
-      ID_Number = ID_Number?ID_Number:ID_Number1 
-      Id_Issued_Place=Id_Issued_Place?Id_Issued_Place:Id_Issued_Place1 
-      Merchant_Name = Merchant_Name?Merchant_Name:Merchant_Name1  
-      Merchant_Nature  = Merchant_Nature?Merchant_Nature:Merchant_Nature1
-      Wallet_Type = Wallet_Type?Wallet_Type:Wallet_Type1 
-      License_No =License_No?License_No:License_No1
-      Website =Website?Website:Website1
-      Report_Email =Report_Email?Report_Email:Report_Email1
-      Email=Email?Email:Email1 
-      Bank_Code = Bank_Code?Bank_Code:Bank_Code1
-      Bank_Account_No = Bank_Account_No?Bank_Account_No: Bank_Account_No1
-      District =District?District:District1
-      City = City?City:City1 
-      Business_Contact_Name = Business_Contact_Name?Business_Contact_Name:Business_Contact_Name1 
-      Business_Contact_Mobile  = Business_Contact_Mobile?Business_Contact_Mobile:Business_Contact_Mobile1
-      Business_Contact_Phone = Business_Contact_Phone?Business_Contact_Phone:Business_Contact_Phone1 
-      Business_Contact_Email = Business_Contact_Email?Business_Contact_Email:Business_Contact_Email1 
-      Technical_Contact_Name = Technical_Contact_Name?Technical_Contact_Name:Technical_Contact_Name1 
-      Technical_Contact_Mobile = Technical_Contact_Mobile?Technical_Contact_Mobile:Technical_Contact_Mobile1 
-      Technical_Contact_Phone = Technical_Contact_Phone?Technical_Contact_Phone:Technical_Contact_Phone1 
-      Technical_Contact_Email = Technical_Contact_Email?Technical_Contact_Email:Technical_Contact_Email1 
-      Account_Contact_Name = Account_Contact_Name?Account_Contact_Name:Account_Contact_Name1 
-      Account_Contact_Mobile = Account_Contact_Mobile?Account_Contact_Mobile:Account_Contact_Mobile1 
-      Account_Contact_Phone  = Account_Contact_Phone?Account_Contact_Phone:Account_Contact_Phone1
-      Account_Contact_Email = Account_Contact_Email?Account_Contact_Email:Account_Contact_Email1
-      Communice = Communice?Communice:Communice1 
-      Street_House_No = Street_House_No?Street_House_No:Street_House_No1
+      ID_Number = ID_Number ? ID_Number : ID_Number1
+      Id_Issued_Place = Id_Issued_Place ? Id_Issued_Place : Id_Issued_Place1
+      Merchant_Name = Merchant_Name ? Merchant_Name : Merchant_Name1
+      Merchant_Nature = Merchant_Nature ? Merchant_Nature : Merchant_Nature1
+      Wallet_Type = Wallet_Type ? Wallet_Type : Wallet_Type1
+      License_No = License_No ? License_No : License_No1
+      Website = Website ? Website : Website1
+      Report_Email = Report_Email ? Report_Email : Report_Email1
+      Email = Email ? Email : Email1
+      Bank_Code = Bank_Code ? Bank_Code : Bank_Code1
+      Bank_Account_No = Bank_Account_No ? Bank_Account_No : Bank_Account_No1
+      District = District ? District : District1
+      City = City ? City : City1
+      Business_Contact_Name = Business_Contact_Name ? Business_Contact_Name : Business_Contact_Name1
+      Business_Contact_Mobile = Business_Contact_Mobile ? Business_Contact_Mobile : Business_Contact_Mobile1
+      Business_Contact_Phone = Business_Contact_Phone ? Business_Contact_Phone : Business_Contact_Phone1
+      Business_Contact_Email = Business_Contact_Email ? Business_Contact_Email : Business_Contact_Email1
+      Technical_Contact_Name = Technical_Contact_Name ? Technical_Contact_Name : Technical_Contact_Name1
+      Technical_Contact_Mobile = Technical_Contact_Mobile ? Technical_Contact_Mobile : Technical_Contact_Mobile1
+      Technical_Contact_Phone = Technical_Contact_Phone ? Technical_Contact_Phone : Technical_Contact_Phone1
+      Technical_Contact_Email = Technical_Contact_Email ? Technical_Contact_Email : Technical_Contact_Email1
+      Account_Contact_Name = Account_Contact_Name ? Account_Contact_Name : Account_Contact_Name1
+      Account_Contact_Mobile = Account_Contact_Mobile ? Account_Contact_Mobile : Account_Contact_Mobile1
+      Account_Contact_Phone = Account_Contact_Phone ? Account_Contact_Phone : Account_Contact_Phone1
+      Account_Contact_Email = Account_Contact_Email ? Account_Contact_Email : Account_Contact_Email1
+      Communice = Communice ? Communice : Communice1
+      Street_House_No = Street_House_No ? Street_House_No : Street_House_No1
 
-      Bank_Address = Bank_Address?Bank_Address:Bank_Address1
-      Bank_Swift_Code = Bank_Swift_Code?Bank_Swift_Code:Bank_Swift_Code1
-      Bank_Branch_Code  = Bank_Branch_Code?Bank_Branch_Code:Bank_Branch_Code1
-      Latitude  =Latitude?Latitude:Latitude1
-      Longitude = Longitude?Longitude:Longitude1 
+      Bank_Address = Bank_Address ? Bank_Address : Bank_Address1
+      Bank_Swift_Code = Bank_Swift_Code ? Bank_Swift_Code : Bank_Swift_Code1
+      Bank_Branch_Code = Bank_Branch_Code ? Bank_Branch_Code : Bank_Branch_Code1
+      Latitude = Latitude ? Latitude : Latitude1
+      Longitude = Longitude ? Longitude : Longitude1
 
       sequelize.query(`EXEC SW_PROC_MERCHANTS_PROFILE 
                       @flag = "U",
@@ -377,15 +377,15 @@ router.post('/update', async (req, res) => {
                       @Communice = '${Communice}'`).then(value => {
 
 
-                       const msg = value?value[0].Msg?value[0].Msg:null:null
+          const msg = value ? value[0].Msg ? value[0].Msg : null : null
 
-                     return res.status(200).send(OK(null, msg, req));
+          return res.status(200).send(OK(null, msg, req));
 
 
-              }).catch(e => {
-                console.log(e)
-                return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
-              })
+        }).catch(e => {
+          console.log(e)
+          return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+        })
 
 
     }).catch(e => {
@@ -394,27 +394,44 @@ router.post('/update', async (req, res) => {
     })
 
 
-  } catch (e){
+  } catch (e) {
     return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
   }
 })
 
-router.post('/balance', (req, res)=>{
-  try{
-      let {common_id:Wallet_MSISDN} = req.user_info
-      console.log(Wallet_MSISDN)
+router.post('/balance', (req, res) => {
+  
+  try {
+
+    let { common_id: Wallet_MSISDN } = req.user_info
+   
+    console.log(Wallet_MSISDN)
     SW_TBL_WALLET.findOne({
+     
       where: {
         Wallet_MSISDN
       }
-    }).then(value=>{
-      console.log()
-      return res.status(200).send(OK(value, null, req));
+
+    }).then(value => {
+
+      let data = null
+
+      if(value) {
+
+        let {Amount, ...rest} = value['dataValues']
+        Amount = +(Amount.toFixed(2))
+        data = {...rest, Amount}
+      }
+
+      return res.status(200).send(OK(data, null, req));
     })
-}catch(e){
- console.log('e ', e)
- return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
-}
+
+  } catch (e) {
+
+    console.log('e ', e)
+    return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+  }
+
 })
 
 
