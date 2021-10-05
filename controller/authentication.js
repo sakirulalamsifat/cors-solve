@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import {checkModule,checkAuthorizaion,hassPasswordGenerate,tokenGenerate,verifyPassword} from '../middleware';
 import {CustomerOtherInformationValidator,MobileValidator} from '../middleware/validator'
 import  {OK, INTERNAL_SERVER_ERROR,BAD_REQUEST} from '../helpers/responseHelper'
-import {MerchentUserAuthTrack,MerchentProfile,SmsRequestLog, SW_TBL_JSONRX_REGISTRATION} from '../models'
+import {MerchentUserAuthTrack,MerchentProfile,SmsRequestLog, SW_TBL_JSONRX_REGISTRATION, MerchentAgentProfileMap} from '../models'
 import {genRandomInRange,currenttimestamp,SecondDifferenceBetweenToDate} from '../helpers/utilities'
 import {getImageFullPath} from '../helpers/imagesystem'
 import 'dotenv/config'
@@ -158,10 +158,16 @@ const somePartOfLogin = async(user,req,res,use_temp_password=false)=>{
     let is_merchent = parent_id?false:true
     let common_id = parent_id || MSISDN
 
+    const merchentinfo = await MerchentProfile.findOne({where:{MSISDN:common_id}})
+
+    const merchentagentmap = await MerchentAgentProfileMap.findOne({ where : { Merchent_MSISDN : common_id }})
+    
+    if(merchentagentmap) {
+
+        common_id = merchentagentmap.Agent_MSISDN
+    }
     let token = await tokenGenerate({MSISDN,parent_id,fullname,is_merchent,ismanager,common_id,login_datetime})
 
-    const merchentinfo = await MerchentProfile.findOne({where:{MSISDN:common_id}})
-    
     if(merchentinfo) {
          logo = merchentinfo.Logo_Image ? await getImageFullPath(merchentinfo.Logo_Image) : null
     }
