@@ -13,7 +13,7 @@ import Authentication from './controller/authentication'
 import  MerchentRegisterController from './controller/merchentregisterController'
 import AddressController from './controller/addressController'
 import PublicApiController from './controller/publicapiController'
-import NotificationController from './controller/notificationController'
+
 
 const https = require('https');
 const fs = require('fs');
@@ -74,7 +74,7 @@ app.use("/api/address/",AddressController)
 app.use("/api/auth/",Authentication);
 app.use('/api/public/', PublicApiController)
 app.use("/api/merchent/", MerchentRegisterController)
-app.use("/api/notification/", NotificationController)
+
 
 
 //token check.....after below all route....
