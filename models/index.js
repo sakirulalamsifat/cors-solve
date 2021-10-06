@@ -42,6 +42,30 @@ MerchentContactGroupLink.belongsTo(MerchentContact, {
   as: 'merchent_contact',
 })
 
+BulkNotificationGroup.hasMany(BulkNotificationGroupContact, {
+  targetKey: 'id',
+  foreignKey: 'group_id',
+  as:'bulk_notification_group_contact'
+})
+
+BulkNotificationGroupContact.belongsTo(BulkNotificationGroup, {
+  targetKey: 'id',
+  foreignKey: 'group_id',
+  as:'group_contact'
+})
+
+BulkNotificationGroup.hasMany(BulkNotificationTemp, {
+  targetKey: 'id',
+  foreignKey: 'group_id',
+  as:'bulk_notification_group_contact'
+})
+
+BulkNotificationTemp.belongsTo(BulkNotificationGroup, {
+  targetKey: 'id',
+  foreignKey: 'group_id',
+  as:'group_contact'
+})
+
 module.exports = {
   CreditUnionMembership,
   SW_TBL_JSONRX_REGISTRATION,
