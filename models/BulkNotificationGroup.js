@@ -6,9 +6,9 @@ const BulkNotificationGroup = sequelize.define(
   {
     id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
       primaryKey: true,
       autoIncrement: true,
+      
     },
     group_name: {
       type: DataTypes.STRING(100),

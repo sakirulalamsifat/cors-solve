@@ -1,6 +1,6 @@
 import express from 'express'
 import  {OK, INTERNAL_SERVER_ERROR,BAD_REQUEST} from '../helpers/responseHelper'
-import {MerchentUserAuthTrack,MerchentProfile} from '../models'
+import {MerchentUserAuthTrack,MerchentProfile, BulkNotificationGroup} from '../models'
 import {hassPasswordGenerate} from '../middleware'
 import 'dotenv/config'
 import {getImageFullPath} from '../helpers/imagesystem'
@@ -61,6 +61,7 @@ router.get('/info',async(req,res)=>{
         return  res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
     }
 })
+
 
 
 

@@ -49,7 +49,7 @@ const BulkNotificationHistory = sequelize.define(
       type: DataTypes.STRING,
     },
     approved_at: {
-      type: DataTypes.STRING,
+      type:DataTypes.DATEONLY,
     },
   },
   {

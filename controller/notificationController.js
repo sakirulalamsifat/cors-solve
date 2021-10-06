@@ -65,28 +65,34 @@ const processcsvfile = async (csvurl, uploaded_by) => {
 
 router.post('/create_notificationgroup', async (req, res) => {
   try {
-    const { groupName } = req.body
+    const { group_name } = req.body
 
-    const createdGroup = await BulkNotificationGroup.findOne({
-      where: { group_name: groupName },
+    BulkNotificationGroup.create({
+      group_name: group_name,
     })
-
-    if (createdGroup) {
-      return res
-        .status(400)
-        .send(BAD_REQUEST(req.i18n.__('GroupNotificationexist'), null, req))
-    } else {
-      BulkNotificationGroup.create({
-        group_name: groupName,
+      .then((data) => {
+        return res.status(200).send(OK(data, null, req))
       })
-        .then((data) => {
-          return res.status(200).send(OK(data, null, req))
-        })
-        .catch((error) => {
-          console.log(error)
-          return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
-        })
-    }
+      .catch((error) => {
+        console.log(error)
+        return res.status(500).send(error)
+      })
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+    
+  }
+})
+
+router.get('/view_notificationgroup', async (req, res) => {
+  try {
+    BulkNotificationGroup.findAll({}) .then((data) => {
+      return res.status(200).send(data)
+    })
+    .catch((error) => {
+      console.log(error)
+      return res.status(500).send(error)
+    })
   } catch (e) {
     return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
   }
@@ -100,7 +106,7 @@ router.post('/delete_notificationgroup', async (req, res) => {
 
     return res.status(200).send(OK(null, null, req))
   } catch (e) {
-    console.log(e)
+    console.log(req.user_info)
     return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
   }
 })
@@ -155,6 +161,7 @@ router.post('/upload', async (req, res) => {
 
 router.post('/create_BulkNotification', async (req, res) => {
   try {
+    let { MSISDN : created_by } = req.user_info
     const {
       group_id,
       title,
@@ -163,19 +170,26 @@ router.post('/create_BulkNotification', async (req, res) => {
       is_email_notification,
       is_sms_notification,
     } = req.body
-    await BulkNotificationTemp.create({
+    BulkNotificationTemp.create({
       group_id,
       title,
       body,
       is_app_notification,
       is_email_notification,
       is_sms_notification,
+      created_by,
       created_at: Sequelize.fn('getdate'),
       approved_by: null,
     })
-
-    return res.status(200).send('BulkNotification Created')
+      .then(async (data) => {
+        return res.status(200).send(OK(null, null, req))
+      })
+      .catch((e) => {
+        console.log(e)
+        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+      })
   } catch (e) {
+    console.log(e);
     return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
   }
 })
@@ -188,6 +202,7 @@ router.post('/approve_bulknotification', async (req, res) => {
       order: [['id', 'ASC']],
     })
 
+    let { MSISDN : approved_by } = req.user_info
     if (!newValue) {
       return false
     }
@@ -197,20 +212,32 @@ router.post('/approve_bulknotification', async (req, res) => {
       created_at = new Date(created_at).toLocaleDateString('fr-CA')
     }
 
-    await BulkNotification.create({
+    BulkNotification.create({
       ...newValue['dataValues'],
       created_at,
-      approved_by: req.user_info,
-      approved_at: Sequelize.fn('getdate'),
+      approved_by,
+   
     })
+      .then(async (data) => {
+        return res.status(200).send(OK(null, null, req))
+      })
+      .catch((e) => {
+        console.log(e)
+        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+      })
 
-    await BulkNotificationHistory.create({
+    BulkNotificationHistory.create({
       ...newValue['dataValues'],
       created_at,
-      approved_by: req.user_info,
-      approved_at: Sequelize.fn('getdate'),
+      approved_by,
     })
-    return res.status(200).send('Notification accepted')
+      .then(async (data) => {
+        return res.status(200).send(OK(null, null, req))
+      })
+      .catch((e) => {
+        console.log(e)
+        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+      })
   } catch (e) {
     return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
   }
@@ -223,6 +250,7 @@ router.post('/reject_bulknotification', async (req, res) => {
       where: { id },
       order: [['id', 'ASC']],
     })
+    let { MSISDN : approved_by } = req.user_info
     if (!newValue) {
       return true
     }
@@ -232,15 +260,27 @@ router.post('/reject_bulknotification', async (req, res) => {
     if (created_at) {
       created_at = new Date(created_at).toLocaleDateString('fr-CA')
     }
-    await BulkNotificationHistory.create({
+    BulkNotificationHistory.create({
       ...newValue['dataValues'],
       created_at,
-      approved_by: req.user_info,
-      approved_at: Sequelize.fn('getdate'),
+      approved_by
     })
+      .then(async (data) => {
+        return res.status(200).send(OK(null, null, req))
+      })
+      .catch((e) => {
+        console.log(e)
+        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+      })
 
-    await BulkNotification.destroy({ where: { id } })
-    return res.status(200).send('notification rejected')
+    BulkNotification.destroy({ where: { id } })
+      .then(async (data) => {
+        return res.status(200).send(OK(null, null, req))
+      })
+      .catch((e) => {
+        console.log(e)
+        return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+      })
   } catch (e) {
     return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
   }

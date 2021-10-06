@@ -42,14 +42,14 @@ const BulkNotification = sequelize.define(
       allowNull: false,
     },
     created_at: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       defaultValue: sequelize.literal('getdate()'),
     },
     approved_by: {
       type: DataTypes.STRING,
     },
     approved_at: {
-      type: DataTypes.STRING,
+      type: DataTypes.DATEONLY,
     },
   },
   {

@@ -12,7 +12,7 @@ const BulkNotificationTemp = sequelize.define(
     },
     group_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      //allowNull: false,
     },
 
     title: {
@@ -42,14 +42,14 @@ const BulkNotificationTemp = sequelize.define(
       allowNull: false,
     },
     created_at: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       defaultValue: sequelize.literal('getdate()'),
     },
     approved_by: {
       type: DataTypes.STRING,
     },
     approved_at: {
-      type: DataTypes.STRING,
+      type: DataTypes.DATE,
     },
   },
   {
