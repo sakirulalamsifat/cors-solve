@@ -9,10 +9,12 @@ const router = express.Router()
 router.get('/city', (req, res)=>{
     try{
         SW_TBL_CITY.findAll({where:{}}).then(citys=>{
-            return res.status(200).send(OK( citys, null, req))
+            return res.status(200).send(OK(citys, null, req))
+            console.log(req.user_info);
         }).catch(e=>{
             return  res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
         })
+        console.log(req.user_info);
     }
     catch(e){
         return  res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
