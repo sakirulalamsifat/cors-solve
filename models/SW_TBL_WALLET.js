@@ -12,7 +12,7 @@ const SW_TBL_WALLET = sequelize.define('SW_TBL_WALLET', {
     Wallet_Code: {
         type: DataTypes.INTEGER,
         allowNull: false
-    },
+    }, 
     Amount: {
         type: DataTypes.DOUBLE,
     },

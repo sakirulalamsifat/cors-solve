@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import {checkModule,checkAuthorizaion,hassPasswordGenerate,tokenGenerate,verifyPassword} from '../middleware';
 import {CustomerOtherInformationValidator,MobileValidator} from '../middleware/validator'
 import  {OK, INTERNAL_SERVER_ERROR,BAD_REQUEST} from '../helpers/responseHelper'
-import {MerchentUserAuthTrack,MerchentProfile,SmsRequestLog, SW_TBL_JSONRX_REGISTRATION} from '../models'
+import {MerchentUserAuthTrack,MerchentProfile,SmsRequestLog, SW_TBL_JSONRX_REGISTRATION, MerchentAgentProfileMap} from '../models'
 import {genRandomInRange,currenttimestamp,SecondDifferenceBetweenToDate} from '../helpers/utilities'
 import {getImageFullPath} from '../helpers/imagesystem'
 import 'dotenv/config'
@@ -156,17 +156,25 @@ const somePartOfLogin = async(user,req,res,use_temp_password=false)=>{
 
     let{MSISDN,parent_id,fullname, ismanager} = user,login_datetime = new Date(), logo = null
     let is_merchent = parent_id?false:true
-    let common_id = parent_id || MSISDN
-
-    let token = await tokenGenerate({MSISDN,parent_id,fullname,is_merchent,ismanager,common_id,login_datetime})
+    let common_id = parent_id || MSISDN, isBank = false, linked_agent_MSISDN = null
 
     const merchentinfo = await MerchentProfile.findOne({where:{MSISDN:common_id}})
+
+    const merchentagentmap = await MerchentAgentProfileMap.findOne({ where : { Merchent_MSISDN : common_id }})
     
+    if(merchentagentmap) {
+
+        common_id = merchentagentmap.Agent_MSISDN
+        isBank = true
+        linked_agent_MSISDN = merchentagentmap.Agent_MSISDN
+    }
+    let token = await tokenGenerate({MSISDN,parent_id,isBank,fullname,is_merchent,ismanager,common_id,login_datetime})
+
     if(merchentinfo) {
          logo = merchentinfo.Logo_Image ? await getImageFullPath(merchentinfo.Logo_Image) : null
     }
 
-    return res.status(200).send(OK( {user_info:{MSISDN,fullname,is_merchent,ismanager, logo},token},null, req));
+    return res.status(200).send(OK( {user_info:{MSISDN,fullname,is_merchent,ismanager, logo,isBank,linked_agent_MSISDN},token},null, req));
 }
 
 router.post('/set_password',checkModule,MobileValidator,async(req,res)=>{

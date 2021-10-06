@@ -22,6 +22,7 @@ import MerchentContact from './MerchentContact'
 import MerchentContactGroup from './MerchentContactGroup'
 import MerchentContactGroupLink from './MerchentContactGroupLink'
 import CreditUnionMembership from './CreditUnionMembership'
+import MerchentAgentProfileMap from './MerchentAgentProfileMap'
 
 import BulkNotification from './BulkNotification'
 import BulkNotificationGroup from './BulkNotificationGroup'
