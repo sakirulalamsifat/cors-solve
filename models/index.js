@@ -78,6 +78,7 @@ module.exports = {
   SW_TBL_PROFILE_MERCHANT_TEMP,
   MerchentProfileUpdateConfig,
   BulkPaymentReportTemp,
+  MerchentAgentProfileMap, 
   SW_TBL_CITY,
   SW_TBL_COUNTRY,
   SW_TBL_DISTRICT,
