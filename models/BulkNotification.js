@@ -38,7 +38,7 @@ const BulkNotification = sequelize.define(
       allowNull: false,
     },
     created_by: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(64),
       allowNull: false,
     },
     created_at: {

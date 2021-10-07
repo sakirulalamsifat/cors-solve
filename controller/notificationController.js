@@ -252,7 +252,7 @@ router.post('/reject_bulknotification', async (req, res) => {
     })
     let { MSISDN : approved_by } = req.user_info
     if (!newValue) {
-      return true
+      return res.status(200).send('no notification with this id found')
     }
 
     let { created_at } = newValue['dataValues']
@@ -273,7 +273,7 @@ router.post('/reject_bulknotification', async (req, res) => {
         return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
       })
 
-    BulkNotification.destroy({ where: { id } })
+    BulkNotificationTemp.destroy({ where: { id } })
       .then(async (data) => {
         return res.status(200).send(OK(null, null, req))
       })
@@ -282,6 +282,27 @@ router.post('/reject_bulknotification', async (req, res) => {
         return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
       })
   } catch (e) {
+    return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+  }
+})
+
+router.get('/pendingNotificationByMe', async (req, res) => {
+  try {
+    let { MSISDN} = req.user_info
+    BulkNotificationTemp.findAll({
+      where:{created_by: { [Op.eq]: MSISDN }},
+      order:[['id', 'DESC']]
+    }) .then((data) => {
+      return res.status(200).send(data)
+    })
+    .catch((error) => {
+      console.log(error)
+      return res.status(500).send(error)
+    })
+    
+    
+  } catch (e) {
+    console.log(e);
     return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
   }
 })
