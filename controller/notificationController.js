@@ -303,12 +303,12 @@ router.post('/reject_bulknotification', async (req, res) => {
 
 router.get('/pendingNotificationByMe', async (req, res) => {
   try {
-    let { MSISDN} = req.user_info
+    let { Username} = req.user_info
     BulkNotificationTemp.findAll({
-      where:{created_by: { [Op.like]: MSISDN }},
+      where:{created_by: { [Op.like]: Username }},
       order:[['id', 'DESC']]
     }) .then((data) => {
-      return res.status(200).send(data)
+      return res.status(200).send(OK(data, null, req))
     })
     .catch((error) => {
       console.log(error)
@@ -324,12 +324,12 @@ router.get('/pendingNotificationByMe', async (req, res) => {
 
 router.get('/pendingNotificationNotByMe', async (req, res) => {
   try {
-    let { MSISDN} = req.user_info
+    let { Username} = req.user_info
     BulkNotificationTemp.findAll({
-      where:{created_by: { [Op.notLike]: MSISDN }},
+      where:{created_by: { [Op.notLike]: Username }},
       order:[['id', 'DESC']]
     }) .then((data) => {
-      return res.status(200).send(data)
+      return res.status(200).send(OK(data, null, req))
     })
     .catch((error) => {
       console.log(error)
