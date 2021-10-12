@@ -14,7 +14,7 @@ const BulkNotificationGroupContact = sequelize.define(
       allowNull: false,
     },
     MSISDN: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.ARRAY(DataTypes.BIGINT),
       allowNull: false,
     },
   },

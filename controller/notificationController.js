@@ -343,4 +343,6 @@ router.get('/pendingNotificationNotByMe', async (req, res) => {
   }
 })
 
+router.get('/')
+
 module.exports = router

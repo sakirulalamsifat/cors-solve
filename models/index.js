@@ -17,7 +17,10 @@ import SW_VW_MERCHANT_REPORT from './SW_VW_MERCHANT_REPORT'
 import MerchentReportTemp from './MerchentTransectionReportTemp'
 import SW_TBL_JSONRX_REGISTRATION from './SW_TBL_JSONRX_REGISTRATION'
 import BulkPaymentReportTemp from './BulkPaymentReportTemp'
+import SW_TBL_PROFILE_AGENTS from './SW_TBL_PROFILE_AGENTS'
+import SW_TBL_PROFILE_CUSTOMERS from './SW_TBL_PROFILE_CUSTOMERS'
 
+  
 import MerchentContact from './MerchentContact'
 import MerchentContactGroup from './MerchentContactGroup'
 import MerchentContactGroupLink from './MerchentContactGroupLink'
@@ -52,6 +55,20 @@ BulkNotificationGroupContact.belongsTo(BulkNotificationGroup, {
   targetKey: 'id',
   foreignKey: 'group_id',
   as:'group_contact'
+})
+
+
+BulkNotification.hasMany(BulkNotificationGroupContact, {
+  targetKey: 'group_id',
+  foreignKey: 'group_id',
+  as:'bulk_notification_contact'
+})
+
+
+BulkNotificationGroupContact.belongsTo(BulkNotification, {
+  targetKey: 'group_id',
+  foreignKey: 'group_id',
+  as:'bulk_notification'
 })
 
 // BulkNotificationGroup.hasMany(BulkNotificationTemp, {
@@ -95,4 +112,6 @@ module.exports = {
   BulkNotificationGroupContact,
   BulkNotificationHistory,
   BulkNotificationTemp,
+  SW_TBL_PROFILE_AGENTS,
+  SW_TBL_PROFILE_CUSTOMERS
 }
