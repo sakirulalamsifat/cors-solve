@@ -64,7 +64,6 @@ router.post('/get_message_info', async (req, res) => {
         const merchentMSISDN = await MerchentProfile.findAll({})
 
         merchentMSISDN.map((data) => {
-          storedData.push(data.MSISDN)
           SmsApi(data.MSISDN, notificationData.body, smsFlag, emailFlag)
         })
       }
@@ -73,7 +72,6 @@ router.post('/get_message_info', async (req, res) => {
         const agentMSISDN = await SW_TBL_PROFILE_AGENTS.findAll({})
 
         agentMSISDN.map((data) => {
-          storedData.push(data.MSISDN)
           SmsApi(data.MSISDN, notificationData.body, smsFlag, emailFlag)
         })
       }
@@ -82,7 +80,6 @@ router.post('/get_message_info', async (req, res) => {
         const customerMSISDN = await SW_TBL_PROFILE_CUSTOMERS.findAll({})
 
         customerMSISDN.map((data) => {
-          storedData.push(data.MSISDN)
           SmsApi(data.MSISDN, notificationData.body, smsFlag, emailFlag)
         })
       } else {
@@ -90,12 +87,10 @@ router.post('/get_message_info', async (req, res) => {
           where: { group_id: notificationData.group_id },
         })
         otherMSISDN.map((data) => {
-          storedData.push(data.MSISDN)
           SmsApi(data.MSISDN, notificationData.body, smsFlag, emailFlag)
         })
       }
 
-      console.log(storedData)
       res.status(200).send(OK('Notification Sent', null, req))
     } else {
       console.log('notification ID does not exist')
