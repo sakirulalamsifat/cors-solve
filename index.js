@@ -10,10 +10,7 @@ import expressValidator from 'express-validator';
 import fileupload from 'express-fileupload';
 import {localize,checkAuthorizaion,checkInvalidInput} from './middleware';
 import Authentication from './controller/authentication'
-import  MerchentRegisterController from './controller/merchentregisterController'
-import AddressController from './controller/addressController'
-import PublicApiController from './controller/publicapiController'
-import NotificationController from './controller/notificationController'
+
 
 
 const https = require('https');
@@ -71,10 +68,9 @@ app.use(fileupload({
 }));
 
 
-app.use("/api/address/",AddressController)
+
 app.use("/api/auth/",Authentication);
-app.use('/api/public/', PublicApiController)
-app.use("/api/merchent/", MerchentRegisterController)
+
 //app.use("/api/notification/", NotificationController )
 
 
@@ -84,17 +80,17 @@ app.use("/api/merchent/", MerchentRegisterController)
 //only use supplier cirtificate upload, it's a fack api..
 app.post('/api/fackupload',(req,res)=>{return res.status(200).send(); })
 
- app.use(checkAuthorizaion);
+//  app.use(checkAuthorizaion);
 
-//dynamic routing so no need to include routes explicitly
- readdir('./routes', (err, files) => {
+// //dynamic routing so no need to include routes explicitly
+//  readdir('./routes', (err, files) => {
 
-     files.forEach(file => {
-         app.use(`/`, require(`./routes/` + file));
+//      files.forEach(file => {
+//          app.use(`/`, require(`./routes/` + file));
 
-     });
+//      });
 
- });
+//  });
 
  //https.createServer(options,app).listen(PORT,()=>console.log(`app run on port ${PORT}`));
  
