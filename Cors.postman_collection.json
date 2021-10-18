@@ -1,0 +1,75 @@
+{
+	"info": {
+		"_postman_id": "3275d366-976e-4ca9-8260-5db17dcffcce",
+		"name": "Cors",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Request-Url",
+						"value": "http://3.143.176.192:5001/api/JsonRx/AppRegister",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"AppVersion\":\"1.0.0 17\",\r\n    \"DeviceId\":\"05b96b9793596426\",\r\n    \"FLAG\":\"agentmerchant\",\r\n    \"FullName\":\"05b96b9793596426\",\r\n    \"Msisdn\":\"17679876567\",\r\n    \"OsVersion\":\"10\",\r\n    \"PhoneBrand\":\"OPPO\",\r\n    \"PhoneOs\":\"Android\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/auth/getOtp",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"auth",
+						"getOtp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"AppVersion\":\"1.0.0 17\",\r\n    \"DeviceId\":\"05b96b9793596426\",\r\n    \"FLAG\":\"agentmerchant\",\r\n    \"FullName\":\"05b96b9793596426\",\r\n    \"Msisdn\":\"17679876567\",\r\n    \"OsVersion\":\"10\",\r\n    \"PhoneBrand\":\"OPPO\",\r\n    \"PhoneOs\":\"Android\",\r\n    \"otp\":\"185765\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/auth/validateOtp",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"auth",
+						"validateOtp"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

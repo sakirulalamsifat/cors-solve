@@ -4,15 +4,9 @@ import {
   INTERNAL_SERVER_ERROR,
   BAD_REQUEST,
 } from '../helpers/responseHelper'
-import {
-  MerchentProfile,
-  BulkNotification,
-  BulkNotificationGroupContact,
-  SW_TBL_PROFILE_AGENTS,
-  SW_TBL_PROFILE_CUSTOMERS,
-} from '../models'
 
 import 'dotenv/config'
+import { parse, stringify, toJSON, fromJSON } from 'flatted'
 import axios from 'axios'
 
 const router = express.Router()
@@ -26,78 +20,72 @@ const sms_api_userid = process.env.sms_api_userid
 const sms_api_handle = process.env.sms_api_handle
 const sms_api_from = process.env.sms_api_from
 
-const mlajan_notification_api_base_url =
-  process.env.mlajan_notification_api_base_url
-
-const SmsApi = (Destination_MSISDN, body, sms, email) => {
-  //fetch sms api....
-  axios.post(`${mlajan_notification_api_base_url}/api/smsRouter`, {
-    Msisdn: Destination_MSISDN,
-    Message: body,
-    Keyword: 'AOTP',
-    SendSms: sms,
-    sendemail: email,
-  })
-}
-
-router.post('/get_message_info', async (req, res) => {
+router.post('/getOtp', async (req, res) => {
   try {
-    const { id } = req.body
-    const storedData = []
-    let smsFlag = `Y`
-    let emailFlag = true
-    const notificationData = await BulkNotification.findOne({ where: { id } })
-
-    if (notificationData) {
-      if (notificationData.is_sms_notification == 1) {
-        smsFlag = 'Y'
-      } else {
-        smsFlag = 'N'
+    const {
+      AppVersion,
+      DeviceId,
+      FLAG,
+      FullName,
+      Msisdn,
+      OsVersion,
+      PhoneBrand,
+      PhoneOs,
+    } = req.body
+    const response = await axios.post(
+      `http://3.143.176.192:5013/get-app-otp`,
+      {
+        AppVersion,
+        DeviceId,
+        FLAG,
+        FullName,
+        Msisdn,
+        OsVersion,
+        PhoneBrand,
+        PhoneOs,
+      },
+      {
+        headers: {
+          'Request-Url': 'http://3.143.176.192:5001/api/JsonRx/AppRegister',
+        },
       }
+    )
 
-      if (notificationData.is_email_notification == 1) {
-        emailFlag = true
-      } else {
-        emailFlag = false
+    return res.status(200).send(OK(response.data, null, req))
+  } catch (e) {
+    console.log(e)
+    return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+  }
+})
+
+router.post('/validateOtp', async (req, res) => {
+  try {
+    const {
+      AppVersion,
+      DeviceId,
+      FLAG,
+      FullName,
+      Msisdn,
+      OsVersion,
+      PhoneBrand,
+      PhoneOs,
+      otp,
+    } = req.body
+    const response = await axios.post(
+      `http://3.143.176.192:5001/api/JsonRx/ValidateOtp`,
+      {
+        AppVersion,
+        DeviceId,
+        FLAG,
+        FullName,
+        Msisdn,
+        OsVersion,
+        PhoneBrand,
+        PhoneOs,
+        otp,
       }
-      if (notificationData.group_id == 1) {
-        const merchentMSISDN = await MerchentProfile.findAll({})
-
-        merchentMSISDN.map((data) => {
-          SmsApi(data.MSISDN, notificationData.body, smsFlag, emailFlag)
-        })
-      }
-
-      if (notificationData.group_id == 2) {
-        const agentMSISDN = await SW_TBL_PROFILE_AGENTS.findAll({})
-
-        agentMSISDN.map((data) => {
-          SmsApi(data.MSISDN, notificationData.body, smsFlag, emailFlag)
-        })
-      }
-
-      if (notificationData.group_id == 3) {
-        const customerMSISDN = await SW_TBL_PROFILE_CUSTOMERS.findAll({})
-
-        customerMSISDN.map((data) => {
-          SmsApi(data.MSISDN, notificationData.body, smsFlag, emailFlag)
-        })
-      } else {
-        const otherMSISDN = await BulkNotificationGroupContact.findAll({
-          where: { group_id: notificationData.group_id },
-        })
-        otherMSISDN.map((data) => {
-          SmsApi(data.MSISDN, notificationData.body, smsFlag, emailFlag)
-        })
-      }
-
-      res.status(200).send(OK('Notification Sent', null, req))
-    } else {
-      console.log('notification ID does not exist')
-      res
-        .status(400)
-        .send(BAD_REQUEST('notification ID does not exist', null, req))
-    }
+    )
+    return res.status(200).send(OK(response.data, null, req))
   } catch (e) {
     console.log(e)
     return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
