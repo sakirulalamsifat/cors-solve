@@ -19,7 +19,7 @@ const sms_api_username = process.env.sms_api_username
 const sms_api_userid = process.env.sms_api_userid
 const sms_api_handle = process.env.sms_api_handle
 const sms_api_from = process.env.sms_api_from
-const token = 'MTc2Nzk4NzY1Njc6WU1WQjVrY2VjcDZ0R2pRU0U0QlN3Zz09'
+//const token = 'MTc2Nzk4NzY1Njc6WU1WQjVrY2VjcDZ0R2pRU0U0QlN3Zz09'
 
 router.post('/getOtp', async (req, res) => {
   try {
@@ -103,6 +103,7 @@ router.post('/cashin', async (req, res) => {
       Keyword,
       Msisdn,
       PIN,
+      token
     } = req.body
     const response = await axios.post(
       `http://3.143.176.192:5001/api/JsonRx/GetAmlConfirmResponse`,
@@ -139,6 +140,7 @@ router.post('/transaction', async (req, res) => {
       PhoneBrand,
       PhoneOs,
       msisdn,
+      token
     } = req.body
     const response = await axios.post(
       `http://3.143.176.192:5001/api/JsonRx/Transaction`,
@@ -175,6 +177,7 @@ router.post('/getTransactionResult', async (req, res) => {
       PhoneBrand,
       PhoneOs,
       TransactionId,
+      token
     } = req.body
     const response = await axios.post(
       `http://3.143.176.192:5001/api/JsonRx/GetTransactionResult`,
