@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "New Request",
+			"name": "getOtp",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -42,13 +42,13 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "validateOtp",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"AppVersion\":\"1.0.0 17\",\r\n    \"DeviceId\":\"05b96b9793596426\",\r\n    \"FLAG\":\"agentmerchant\",\r\n    \"FullName\":\"05b96b9793596426\",\r\n    \"Msisdn\":\"17679876567\",\r\n    \"OsVersion\":\"10\",\r\n    \"PhoneBrand\":\"OPPO\",\r\n    \"PhoneOs\":\"Android\",\r\n    \"otp\":\"185765\"\r\n}",
+					"raw": "{\r\n    \"AppVersion\":\"1.0.0 17\",\r\n    \"DeviceId\":\"05b96b9793596426\",\r\n    \"FLAG\":\"agentmerchant\",\r\n    \"FullName\":\"05b96b9793596426\",\r\n    \"Msisdn\":\"17679876567\",\r\n    \"OsVersion\":\"10\",\r\n    \"PhoneBrand\":\"OPPO\",\r\n    \"PhoneOs\":\"Android\",\r\n    \"otp\":\"270402\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -66,6 +66,96 @@
 						"api",
 						"auth",
 						"validateOtp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cashin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"Amount\":\"10\",\r\n\"Currency\":\"XCD\",\r\n\"CustomerMsisdn\":\"\",\r\n\"DestinationMsisdn\":\"17676128325\",\r\n\"Keyword\":\"CASH\",\r\n\"Msisdn\":\"17679876567\",\r\n\"PIN\":\"1478\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/auth/cashin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"auth",
+						"cashin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "transaction",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"AppVersion\":\"1.0.0 17\",\r\n    \"FullName\":\"05b96b9793596426\",\r\n    \"MessageBody\":\"CASH 17676128325 10 1478\",\r\n    \"OsVersion\":\"10\",\r\n    \"PhoneBrand\":\"OPPO\",\r\n    \"PhoneOs\":\"Android\",\r\n    \"msisdn\":\"17679876567\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/auth/transaction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"auth",
+						"transaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "gettransaction result",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"AppVersion\":\"1.0.0 17\",\r\n   \"FullName\":\"05b96b9793596426\",\r\n   \"Msisdn\":\"17679876567\",\r\n   \"OsVersion\":\"10\",\r\n   \"PhoneBrand\":\"OPPO\",\r\n   \"PhoneOs\":\"Android\",\r\n   \"TransactionId\":\"2110190746674\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/auth/getTransactionResult",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"auth",
+						"getTransactionResult"
 					]
 				}
 			},

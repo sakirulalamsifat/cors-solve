@@ -19,6 +19,7 @@ const sms_api_username = process.env.sms_api_username
 const sms_api_userid = process.env.sms_api_userid
 const sms_api_handle = process.env.sms_api_handle
 const sms_api_from = process.env.sms_api_from
+const token = 'MTc2Nzk4NzY1Njc6WU1WQjVrY2VjcDZ0R2pRU0U0QlN3Zz09'
 
 router.post('/getOtp', async (req, res) => {
   try {
@@ -85,6 +86,114 @@ router.post('/validateOtp', async (req, res) => {
         otp,
       }
     )
+    return res.status(200).send(OK(response.data, null, req))
+  } catch (e) {
+    console.log(e)
+    return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+  }
+})
+
+router.post('/cashin', async (req, res) => {
+  try {
+    const {
+      Amount,
+      Currency,
+      CustomerMsisdn,
+      DestinationMsisdn,
+      Keyword,
+      Msisdn,
+      PIN,
+    } = req.body
+    const response = await axios.post(
+      `http://3.143.176.192:5001/api/JsonRx/GetAmlConfirmResponse`,
+      {
+        Amount,
+        Currency,
+        CustomerMsisdn,
+        DestinationMsisdn,
+        Keyword,
+        Msisdn,
+        PIN,
+      },
+      {
+        headers: {
+          'Authorization': `Basic ${token}`,
+        },
+      }
+    )
+
+    return res.status(200).send(OK(response.data, null, req))
+  } catch (e) {
+    console.log(e)
+    return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+  }
+})
+
+router.post('/transaction', async (req, res) => {
+  try {
+    const {
+      AppVersion,
+      FullName,
+      MessageBody,
+      OsVersion,
+      PhoneBrand,
+      PhoneOs,
+      msisdn,
+    } = req.body
+    const response = await axios.post(
+      `http://3.143.176.192:5001/api/JsonRx/Transaction`,
+      {
+        AppVersion,
+        FullName,
+        MessageBody,
+        OsVersion,
+        PhoneBrand,
+        PhoneOs,
+        msisdn,
+      },
+      {
+        headers: {
+          'Authorization': `Basic ${token}`,
+        },
+      }
+    )
+
+    return res.status(200).send(OK(response.data, null, req))
+  } catch (e) {
+    console.log(e)
+    return res.status(500).send(INTERNAL_SERVER_ERROR(null, req))
+  }
+})
+
+router.post('/getTransactionResult', async (req, res) => {
+  try {
+    const {
+      AppVersion,
+      FullName,
+      Msisdn,
+      OsVersion,
+      PhoneBrand,
+      PhoneOs,
+      TransactionId,
+    } = req.body
+    const response = await axios.post(
+      `http://3.143.176.192:5001/api/JsonRx/GetTransactionResult`,
+      {
+        AppVersion,
+        FullName,
+        Msisdn,
+        OsVersion,
+        PhoneBrand,
+        PhoneOs,
+        TransactionId,
+      },
+      {
+        headers: {
+          'Authorization': `Basic ${token}`,
+        },
+      }
+    )
+
     return res.status(200).send(OK(response.data, null, req))
   } catch (e) {
     console.log(e)
