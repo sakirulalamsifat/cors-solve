@@ -6,7 +6,6 @@ import {
 } from '../helpers/responseHelper'
 
 import 'dotenv/config'
-import { parse, stringify, toJSON, fromJSON } from 'flatted'
 import axios from 'axios'
 
 const router = express.Router()
@@ -103,7 +102,8 @@ router.post('/cashin', async (req, res) => {
       Keyword,
       Msisdn,
       PIN,
-      token
+      token,
+      ReferenceId
     } = req.body
     const response = await axios.post(
       `http://3.143.176.192:5001/api/JsonRx/GetAmlConfirmResponse`,
@@ -115,6 +115,7 @@ router.post('/cashin', async (req, res) => {
         Keyword,
         Msisdn,
         PIN,
+        ReferenceId
       },
       {
         headers: {
@@ -122,6 +123,7 @@ router.post('/cashin', async (req, res) => {
         },
       }
     )
+
 
     return res.status(200).send(OK(response.data, null, req))
   } catch (e) {
